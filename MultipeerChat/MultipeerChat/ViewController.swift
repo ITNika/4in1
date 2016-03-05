@@ -20,7 +20,8 @@ import MultipeerConnectivity
 
 class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessionDelegate  {
     
-    let serviceType = "LCOC-Chat"
+    //serviceType kan vara vad som helst, så länge det är kortare än 15 ASCII tecken.
+    let serviceType = "Chat-Convo"
     
     
     //En controller som används för att scanna och bjuda in andra peers manuellt. MCNearbyServiceBrowserDelegate används när vilken peer som helst ska bjudas in automatiskt.
