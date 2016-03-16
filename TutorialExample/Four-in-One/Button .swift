@@ -16,6 +16,8 @@ class Button: ColoredEntity {
     let name: String
     var position: CGPoint
     let color: UIColor
+    //added a property to count the number of players on a button
+    var visitors: Int
     
     var state: ButtonState = .NOT_PRESSED {
         didSet {
@@ -30,6 +32,7 @@ class Button: ColoredEntity {
         self.color = color
         self.name = "\(Button.entityName) \(self.id)"
         self.position = CGPointMake(x,y)
+        self.visitors = 0
     }
     
     func unpress(){

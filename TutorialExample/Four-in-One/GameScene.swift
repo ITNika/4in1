@@ -154,14 +154,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let name = otherNode.name {
             //is other node a button
             if let button = buttons[name] {
-                button.state = (player.color === button.color) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
-                
+                if button.state != .PRESSED_RIGHT_COLOR{
+                    button.state = (player.color === button.color) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
+                }
+                button.visitors = button.visitors + 1
                 if button.state == ButtonState.PRESSED_RIGHT_COLOR && isGameOver() {
                    gameOver()
                 }
-                
-                for listener in button.listeners {
-                    listener.onButtonStateChange(button.state)
+                if button.visitors == 1{
+                    for listener in button.listeners {
+                        listener.onButtonStateChange(button.state)
+                    }
                 }
                 debugPrint("solved contact between \(player.name) and \(button.name)")
             }
@@ -169,7 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didEndContact(contact: SKPhysicsContact) {
-        debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) began")
+        debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) ended")
         let A = contact.bodyA.node!
         let B = contact.bodyB.node!
         
@@ -196,9 +199,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let name = otherNode.name {
             //is other node a button
             if let button = buttons[name] {
-                button.state = .NOT_PRESSED
-                for listener in button.listeners {
-                    listener.onButtonStateChange(button.state)
+                button.visitors = button.visitors - 1
+                if button.visitors == 0{
+                    button.state = .NOT_PRESSED
+                    for listener in button.listeners {
+                        listener.onButtonStateChange(button.state)
+                    }
+                }
+                    //Assuming that there is only one player of each color
+                else if player.color == button.color{
+                    button.state = .PRESSED_WRONG_COLOR
                 }
                 debugPrint("solved contact between \(player.name) and \(button.name)")
             }
