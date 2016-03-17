@@ -58,16 +58,40 @@
 		1106740F1C9ABF52007CE749 /* 4-in-1 */ = {
 			isa = PBXGroup;
 			children = (
+				110674261C9AC040007CE749 /* Model */,
+				110674271C9AC047007CE749 /* View */,
+				110674281C9AC04D007CE749 /* Controller */,
 				110674101C9ABF52007CE749 /* AppDelegate.swift */,
 				110674121C9ABF52007CE749 /* GameScene.sks */,
-				110674141C9ABF52007CE749 /* GameScene.swift */,
-				110674161C9ABF52007CE749 /* GameViewController.swift */,
 				110674181C9ABF52007CE749 /* Main.storyboard */,
 				1106741B1C9ABF52007CE749 /* Assets.xcassets */,
 				1106741D1C9ABF52007CE749 /* LaunchScreen.storyboard */,
 				110674201C9ABF52007CE749 /* Info.plist */,
 			);
 			path = "4-in-1";
+			sourceTree = "<group>";
+		};
+		110674261C9AC040007CE749 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		110674271C9AC047007CE749 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		110674281C9AC04D007CE749 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				110674141C9ABF52007CE749 /* GameScene.swift */,
+				110674161C9ABF52007CE749 /* GameViewController.swift */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
