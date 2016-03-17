@@ -17,6 +17,7 @@
 		1106742A1C9AC1C7007CE749 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110674291C9AC1C7007CE749 /* Character.swift */; };
 		1106742C1C9AC249007CE749 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106742B1C9AC249007CE749 /* Entity.swift */; };
 		1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106742D1C9AC286007CE749 /* ColoredEntity.swift */; };
+		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		110674291C9AC1C7007CE749 /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		1106742B1C9AC249007CE749 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		1106742D1C9AC286007CE749 /* ColoredEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoredEntity.swift; sourceTree = "<group>"; };
+		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +102,7 @@
 		110674281C9AC04D007CE749 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */,
 				110674141C9ABF52007CE749 /* GameScene.swift */,
 				110674161C9ABF52007CE749 /* GameViewController.swift */,
 			);
@@ -184,6 +187,7 @@
 				E1935A701C9AE951001D9EFC /* Wall.swift in Sources */,
 				110674171C9ABF52007CE749 /* GameViewController.swift in Sources */,
 				1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */,
+				E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */,
 				110674111C9ABF52007CE749 /* AppDelegate.swift in Sources */,
 				1106742A1C9AC1C7007CE749 /* Character.swift in Sources */,
 			);
