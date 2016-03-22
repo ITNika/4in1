@@ -122,6 +122,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.physicsBody!.collisionBitMask = GameScene.noCategory
             node.name = "\(entity.name)"
             return node
+        case let entity as Wall:
+            let size = CGSizeMake(entity.width, entity.height)
+            let node = SKShapeNode(rectOfSize: size)
+            node.fillColor = UIColor.whiteColor()
+            node.userInteractionEnabled = false
+            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+            node.position = self.convertPointToView(entity.position)
+            debugPrint(node.position)
+            node.physicsBody!.dynamic = false
+            node.physicsBody!.categoryBitMask = GameScene.wallOnCategory
+            node.physicsBody!.contactTestBitMask = GameScene.noCategory
+            node.physicsBody!.collisionBitMask = GameScene.playerCategory
+            node.name = "\(entity.name)"
+            return node
         default: return nil
         }
     }
