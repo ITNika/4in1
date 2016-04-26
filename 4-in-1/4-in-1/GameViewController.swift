@@ -13,8 +13,26 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        goToMenuScene()
+    }
 
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
+    func goToMenuScene(){
         let scene = MenuScene(size: view.bounds.size)
+        scene.gvc = self
+        presentScene(scene)
+    }
+    
+    func goToGameScene(){
+        let gameScene = GameScene(size: view.bounds.size)
+        gameScene.gvc = self
+        presentScene(gameScene)
+    }
+    
+    func presentScene(scene: SKScene){
         let skView = view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -22,10 +40,6 @@ class GameViewController: UIViewController {
         scene.scaleMode = .ResizeFill
         skView.presentScene(scene)
     }
-
-
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+    
 }
 

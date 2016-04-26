@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class MenuScene: SKScene {
+class MenuScene: SKScene, Scene {
     
     var titleLabel : SKLabelNode?   //Skapar nya noder
     var newGameLabel : SKLabelNode?
@@ -16,6 +16,9 @@ class MenuScene: SKScene {
     var settingsLabel : SKLabelNode?
     var tutorialLabel : SKLabelNode?
     var texture: SKTexture?
+    var gvc : GameViewController?
+    let fontSmall : CGFloat = 28
+    let fontBig : CGFloat  = 38
     
     //let menuImage = SKSpriteNode(imageNamed: "mainbg.jpg")
     
@@ -33,11 +36,11 @@ class MenuScene: SKScene {
         self.tutorialLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         self.settingsLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         
-        self.titleLabel!.fontSize = 38              //Sätter storleken på de texten
-        self.newGameLabel!.fontSize = 28
-        self.joinGameLabel!.fontSize = 28
-        self.tutorialLabel!.fontSize = 28
-        self.settingsLabel!.fontSize = 28
+        self.titleLabel!.fontSize = fontBig             //Sätter storleken på de texten
+        self.newGameLabel!.fontSize = fontSmall
+        self.joinGameLabel!.fontSize = fontSmall
+        self.tutorialLabel!.fontSize = fontSmall
+        self.settingsLabel!.fontSize = fontSmall
         
         self.titleLabel!.fontColor = UIColor.orangeColor()      //Sätter färg på texten
         self.newGameLabel!.fontColor = UIColor.orangeColor()
@@ -112,6 +115,7 @@ class MenuScene: SKScene {
                 print("Title Label Pressed")
             }else if nodeAtTouch.name == "new" {
                 print("New game Label Pressed")
+                gvc?.goToGameScene()
             }else if nodeAtTouch.name == "join"{
                 print("Join Label pressed")
             }else if nodeAtTouch.name == "tutorial"{
