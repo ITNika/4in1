@@ -19,6 +19,11 @@
 		1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106742D1C9AC286007CE749 /* ColoredEntity.swift */; };
 		11A079651CCF86C600B1C7A0 /* EntityNodeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079641CCF86C600B1C7A0 /* EntityNodeFactory.swift */; };
 		11A079671CCF8B0D00B1C7A0 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079661CCF8B0D00B1C7A0 /* Scene.swift */; };
+		11A079691CCF8DA700B1C7A0 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */; };
+		11A0796B1CCF8DF200B1C7A0 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A0796A1CCF8DF200B1C7A0 /* Button.swift */; };
+		11A0796D1CCF8E1800B1C7A0 /* ButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A0796C1CCF8E1800B1C7A0 /* ButtonState.swift */; };
+		11A0796F1CCF8E5B00B1C7A0 /* ButtonListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A0796E1CCF8E5B00B1C7A0 /* ButtonListener.swift */; };
+		11A079711CCF8E8F00B1C7A0 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079701CCF8E8F00B1C7A0 /* Obstacle.swift */; };
 		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +43,11 @@
 		1106742D1C9AC286007CE749 /* ColoredEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoredEntity.swift; sourceTree = "<group>"; };
 		11A079641CCF86C600B1C7A0 /* EntityNodeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityNodeFactory.swift; sourceTree = "<group>"; };
 		11A079661CCF8B0D00B1C7A0 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
+		11A0796A1CCF8DF200B1C7A0 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		11A0796C1CCF8E1800B1C7A0 /* ButtonState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonState.swift; sourceTree = "<group>"; };
+		11A0796E1CCF8E5B00B1C7A0 /* ButtonListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonListener.swift; sourceTree = "<group>"; };
+		11A079701CCF8E8F00B1C7A0 /* Obstacle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
 		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +102,10 @@
 				1106742B1C9AC249007CE749 /* Entity.swift */,
 				1106742D1C9AC286007CE749 /* ColoredEntity.swift */,
 				E1935A6F1C9AE951001D9EFC /* Wall.swift */,
+				11A0796A1CCF8DF200B1C7A0 /* Button.swift */,
+				11A0796C1CCF8E1800B1C7A0 /* ButtonState.swift */,
+				11A0796E1CCF8E5B00B1C7A0 /* ButtonListener.swift */,
+				11A079701CCF8E8F00B1C7A0 /* Obstacle.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -111,6 +125,7 @@
 				110674141C9ABF52007CE749 /* GameScene.swift */,
 				110674161C9ABF52007CE749 /* GameViewController.swift */,
 				11A079661CCF8B0D00B1C7A0 /* Scene.swift */,
+				11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -190,10 +205,15 @@
 			files = (
 				110674151C9ABF52007CE749 /* GameScene.swift in Sources */,
 				1106742C1C9AC249007CE749 /* Entity.swift in Sources */,
+				11A079711CCF8E8F00B1C7A0 /* Obstacle.swift in Sources */,
 				11A079671CCF8B0D00B1C7A0 /* Scene.swift in Sources */,
+				11A0796D1CCF8E1800B1C7A0 /* ButtonState.swift in Sources */,
+				11A079691CCF8DA700B1C7A0 /* TutorialScene.swift in Sources */,
+				11A0796F1CCF8E5B00B1C7A0 /* ButtonListener.swift in Sources */,
 				11A079651CCF86C600B1C7A0 /* EntityNodeFactory.swift in Sources */,
 				E1935A701C9AE951001D9EFC /* Wall.swift in Sources */,
 				110674171C9ABF52007CE749 /* GameViewController.swift in Sources */,
+				11A0796B1CCF8DF200B1C7A0 /* Button.swift in Sources */,
 				1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */,
 				E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */,
 				110674111C9ABF52007CE749 /* AppDelegate.swift in Sources */,
