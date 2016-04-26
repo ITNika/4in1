@@ -14,6 +14,7 @@ class GameScene: SKScene {
     var movingCharacter: Character?
     let enf = EntityNodeFactory()
     
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
