@@ -120,6 +120,7 @@ class MenuScene: SKScene, Scene {
                 print("Join Label pressed")
             }else if nodeAtTouch.name == "tutorial"{
                 print("Tutorial Label pressed")
+                gvc?.goToTutorial()
             }else if nodeAtTouch.name == "set"{
                 print("Settings Label pressed")
             }

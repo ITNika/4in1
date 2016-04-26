@@ -32,6 +32,12 @@ class GameViewController: UIViewController {
         presentScene(gameScene)
     }
     
+    func goToTutorial(){
+        let tutorial = TutorialScene(size: view.bounds.size)
+        tutorial.gvc = self
+        presentScene(tutorial)
+    }
+    
     func presentScene(scene: SKScene){
         let skView = view as! SKView
         skView.showsFPS = true
