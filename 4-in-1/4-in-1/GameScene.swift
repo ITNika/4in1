@@ -41,9 +41,16 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
     //animations
     let fadeIn : SKAction  = SKAction.fadeInWithDuration(1)
     let fadeOut : SKAction  = SKAction.fadeOutWithDuration(1)
+    let scaleUp : SKAction = SKAction.scaleBy(CGFloat(1.2), duration: 0.2)
+    let scaleDown : SKAction = SKAction.scaleBy(1/1.2, duration: 0.2)
     
     override func didMoveToView(view: SKView) {
         debugPrint("did move to game scene view")
+        //add timing functions to scale animations
+        fadeIn.timingFunction = {sin($0*Float(M_PI_2))}
+        fadeOut.timingFunction = { sin($0*Float(M_PI_2))}
+        scaleUp.timingFunction = {sin($0*Float(M_PI_2))}
+        scaleDown.timingFunction = {sin($0*Float(M_PI_2))}
         //stop advertising
         cm?.stopHosting()
         //remove gravity
@@ -280,7 +287,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
             }
         }
     }
-        
+    
     func removeCharacter(character: Character){
         var index = 0
         for c in characters {
@@ -376,6 +383,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
                 //move a player?
                 if let character = getCharacterByName(name) {
                     movingCharacter = character
+                    touchedNode.runAction(scaleUp) //
                     debugPrint("\(name) is moving")
                 } else {
                     debugPrint("No character with that name....")
@@ -418,7 +426,13 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         debugPrint("\(movingCharacter?.name) stopped moving")
-        movingCharacter = nil
+        if movingCharacter != nil  {
+            if let node = self.childNodeWithName(movingCharacter!.name){
+                node.runAction(scaleDown)
+            }
+            movingCharacter = nil
+        }
+
     }
     
     
