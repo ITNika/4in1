@@ -27,7 +27,7 @@
 		11CAE1B91CCFB989001F34AB /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1B81CCFB989001F34AB /* ConnectivityManager.swift */; };
 		11CAE1BF1CD24241001F34AB /* ConnectionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1BE1CD24241001F34AB /* ConnectionListener.swift */; };
 		11CAE1C11CD2918D001F34AB /* Portal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1C01CD2918D001F34AB /* Portal.swift */; };
-f763d470f8c195753ec98516a5bb9e3e52ac07a4
+
 		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
@@ -55,7 +55,7 @@ f763d470f8c195753ec98516a5bb9e3e52ac07a4
 		11CAE1B81CCFB989001F34AB /* ConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		11CAE1BE1CD24241001F34AB /* ConnectionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionListener.swift; sourceTree = "<group>"; };
 		11CAE1C01CD2918D001F34AB /* Portal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Portal.swift; sourceTree = "<group>"; };
-f763d470f8c195753ec98516a5bb9e3e52ac07a4
+
 		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
