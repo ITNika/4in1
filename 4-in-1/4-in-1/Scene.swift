@@ -9,5 +9,5 @@
 import Foundation
 
 protocol Scene {
-    var gvc: GameViewController? {get}
+    var gvc: GameViewController? {get set}
 }

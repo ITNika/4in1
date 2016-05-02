@@ -51,18 +51,21 @@ class GameViewController: UIViewController, ConnectionListener {
     }
     
     func goToTutorial(){
+        debugPrint("going to tutorial...")
         let tutorial = TutorialScene(size: view.bounds.size)
         tutorial.gvc = self
         presentScene(tutorial)
     }
     
     func presentScene(scene: SKScene){
+        debugPrint("presenting scene")
         let skView = view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        skView.ignoresSiblingOrder = true
-        scene.scaleMode = .ResizeFill
-        skView.presentScene(scene)
+            skView.showsFPS = true
+            skView.showsNodeCount = true
+            skView.ignoresSiblingOrder = true
+            scene.scaleMode = .ResizeFill
+            skView.presentScene(scene)
+
     }
     //Connection Listener
     func handleMessage(message: String){

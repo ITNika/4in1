@@ -44,8 +44,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
     var ipadNr : Int = 0
     
     override func didMoveToView(view: SKView) {
+        debugPrint("did move to game scene view")
+        
         //stop advertising
-        cm!.stopHosting()
+        cm?.stopHosting()
         //remove gravity
         self.physicsWorld.gravity = CGVectorMake(0,0)
         // set self to contact delegate
@@ -87,7 +89,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
         /********************************
          OBSTACLES
          ********************************/
-        let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: colorMap["blue"]!, width: 50, height: screenHeight)
+        let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: colorMap["blue"]!, width: 75, height: screenHeight)
         
         // create wall node
         let wallNode = createShapeNodeFromModel(wall)!
@@ -417,7 +419,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
                 let deltaY = newPosition.y - oldPosition.y
                 let distance = hypot(deltaX, deltaY);
                 
-                let maxDistance: CGFloat = 150
+                let maxDistance: CGFloat = 75
                 if(distance <= maxDistance){
                     movingCharacter!.position = newPosition
                 }

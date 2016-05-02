@@ -152,17 +152,16 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController){
         debugPrint("bvc did finish...")
         gvc?.dismissViewControllerAnimated(true, completion: nil)
-        
-        debugPrint("connected peers: \(session.connectedPeers.count)")
-        for peer in session.connectedPeers {
-            debugPrint("\(peer.displayName) :  \(session.connectedPeers.indexOf(peer))")
+        //debugPrint("connected peers: \(session.connectedPeers.count)")
+        if session.connectedPeers.count > 0 {
+            sendString("start game") //todo include peers index
+            gvc?.goToGameScene()
         }
-        sendString("start game") //todo include peers index
-        gvc?.goToGameScene()
     }
     
     func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController){
          debugPrint("bvc was cancelled...")
+
         gvc?.dismissViewControllerAnimated(true, completion: nil)
         gvc?.goToMenuScene()
     }
