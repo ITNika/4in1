@@ -7,8 +7,9 @@
 //
 
 import SpriteKit
+import MultipeerConnectivity
 
-class MenuScene: SKScene, Scene {
+class MenuScene: SKScene, Scene, ConnectionListener {
     
     var titleLabel : SKLabelNode?   //Skapar nya noder
     var newGameLabel : SKLabelNode?
@@ -17,12 +18,20 @@ class MenuScene: SKScene, Scene {
     var tutorialLabel : SKLabelNode?
     var texture: SKTexture?
     var gvc : GameViewController?
+    var cm : ConnectivityManager?
     let fontSmall : CGFloat = 28
     let fontBig : CGFloat  = 38
     
     //let menuImage = SKSpriteNode(imageNamed: "mainbg.jpg")
     
+
+    override func willMoveFromView(view: SKView) {
+        //gvc?.cm!.stopHosting()
+    }
+    
     override func didMoveToView(view: SKView) {
+        // hosting
+        cm?.startHosting()
         
         //menuImage.size.height = self.size.height
         //menuImage.size.width = self.size.width
@@ -72,7 +81,6 @@ class MenuScene: SKScene, Scene {
         self.addChild(self.tutorialLabel!)
         self.addChild(self.settingsLabel!)
         
-        
         //GameScene = self
         // setupLayers()
         
@@ -104,8 +112,6 @@ class MenuScene: SKScene, Scene {
         
         //self.addChild(sprite)
         //}
-        
-        
     }
     
     func menuHelper(touches: Set<UITouch>) {
@@ -115,9 +121,7 @@ class MenuScene: SKScene, Scene {
                 print("Title Label Pressed")
             }else if nodeAtTouch.name == "new" {
                 print("New game Label Pressed")
-                gvc?.goToGameScene()
-            }else if nodeAtTouch.name == "join"{
-                print("Join Label pressed")
+                gvc?.cm?.joinSession()
             }else if nodeAtTouch.name == "tutorial"{
                 print("Tutorial Label pressed")
                 gvc?.goToTutorial()
@@ -131,6 +135,21 @@ class MenuScene: SKScene, Scene {
         /* Called before each frame is rendered */
     }
     
+    //Connection Listener
+    func handleMessage(message: String){
+        // do something?
+    }
+    
+    func onConnectionStateChange(state : MCSessionState){
+        switch(state) {
+        case .NotConnected: self.view?.scene?.backgroundColor = UIColor.redColor()
+            break
+        case .Connecting: self.view?.scene?.backgroundColor = UIColor.blueColor()
+            break
+        case .Connected: self.view?.scene?.backgroundColor = UIColor.greenColor()
+            break
+        }
+    }
     
     
 }

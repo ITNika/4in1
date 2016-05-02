@@ -8,11 +8,16 @@
 
 import UIKit
 import SpriteKit
+import MultipeerConnectivity
 
-class GameViewController: UIViewController {
-
+class GameViewController: UIViewController, ConnectionListener {
+    var cm : ConnectivityManager?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        cm = ConnectivityManager()
+        cm?.addConnectionListener(self)
+        cm!.gvc = self
         goToMenuScene()
     }
 
@@ -23,12 +28,25 @@ class GameViewController: UIViewController {
     func goToMenuScene(){
         let scene = MenuScene(size: view.bounds.size)
         scene.gvc = self
+        scene.cm = cm
+        cm?.addConnectionListener(scene)
         presentScene(scene)
     }
     
     func goToGameScene(){
         let gameScene = GameScene(size: view.bounds.size)
         gameScene.gvc = self
+        gameScene.cm = cm
+        cm?.addConnectionListener(gameScene)
+        presentScene(gameScene)
+    }
+       
+    
+    func goToGameScene(ipadNr: Int){
+        let gameScene = GameScene(size: view.bounds.size)
+        gameScene.gvc = self
+        gameScene.ipadNr = ipadNr
+        cm?.addConnectionListener(gameScene)
         presentScene(gameScene)
     }
     
@@ -46,6 +64,19 @@ class GameViewController: UIViewController {
         scene.scaleMode = .ResizeFill
         skView.presentScene(scene)
     }
+    //Connection Listener
+    func handleMessage(message: String){
+        switch message {
+        case "start game":
+            goToGameScene()
+            break
+        default: break
+            
+        }
+    }
     
+    func onConnectionStateChange(state : MCSessionState){
+        //todo
+    }
 }
 

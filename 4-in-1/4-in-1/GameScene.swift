@@ -7,25 +7,17 @@
 //
 
 import SpriteKit
+import MultipeerConnectivity
 
-class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
-    /*  CONTACT   | player    |   button  |   Wall      |
-    -----------------------------------------------------
-    | player      |  yes      |   yes     | no          |
-    -----------------------------------------------------
-    | button      |  yes      |   -       | -           |
-    -----------------------------------------------------
-    | obstacles   |  no       |   -       | -           |
-    -----------------------------------------------------*/
-    
-    /* COLLISION   | player    |   button  | Wall(on/off)|
-    --------------------------------------------------
-    | player       |  yes      |   yes     | yes/no      |
-    --------------------------------------------------
-    | button       |  no       |   -       | -           |
-    --------------------------------------------------
-    | obstacles    |  no       |   -       | -           |
-    -----------------------------------------------------*/
+class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
+    /*  CONTACT   | player    |   button  |   Wall      |      /* COLLISION   | player    |   button  | Wall(on/off)|
+    -----------------------------------------------------       --------------------------------------------------
+    | player      |  yes      |   yes     | no          |      | player       |  yes      |   yes     | yes/no      |
+    -----------------------------------------------------       --------------------------------------------------
+    | button      |  yes      |   -       | -           |      | button       |  no       |   -       | -           |
+    -----------------------------------------------------      --------------------------------------------------
+    | obstacles   |  no       |   -       | -           |      | obstacles    |  no       |   -       | -           |
+     ----------------------------------------------------*/    -----------------------------------------------------*/
     
     //Category mask values
     static let noCategory: UInt32 = 0x1 << 0
@@ -33,40 +25,49 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
     static let buttonCategory: UInt32  = 0x1 << 2
     static let wallOnCategory: UInt32 = 0x1 << 3
     static let wallOffCategory: UInt32 = 0x1 << 4
+    static let portalCategory: UInt32 = 0x1 << 5 // todo ^- add portal to tables
     
     //entities
     var characters = [Character]()
     var movingCharacter: Character?
     var obstacles = [Obstacle]()
     var buttons = [Button]()
+    var portals = [Portal]()
     
-    
-    let enf = EntityNodeFactory()
+    //colors
+    let colorMap: [String : UIColor]  = [ "blue" : UIColor.blueColor(),
+                                          "red" : UIColor.redColor() ]
+
+    //other
+    var cm : ConnectivityManager?
     var gvc : GameViewController?
+    var ipadNr : Int = 0
     
     override func didMoveToView(view: SKView) {
+        //stop advertising
+        cm!.stopHosting()
         //remove gravity
         self.physicsWorld.gravity = CGVectorMake(0,0)
         // set self to contact delegate
         self.physicsWorld.contactDelegate = self
-        
         //init scene
         self.initGameScene()
     }
     
     func initGameScene(){
-        /********************************
-         COLORS
-         ********************************/
-         
-         // create some colors
-        let blue = UIColor.blueColor()
-        let red = UIColor.redColor()
+        //switch on ipadNr
+        switch ipadNr {
+        case 1:
+            break
+        case 2:
+            break
+        default:
+            break
+        }
         
         /********************************
         WALLS
         ********************************/
-        
         // create wall model
         scene!.scaleMode = .AspectFill
         let screenWidth: CGFloat = scene!.size.width
@@ -76,24 +77,17 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
             Wall(x: screenWidth/2, y: 0 , width: screenWidth, height: 1),
             Wall(x: screenWidth, y: screenHeight/2 , width: 1, height: screenHeight),
             Wall(x: screenWidth/2, y: screenHeight , width: screenWidth, height: 1)
-            
         ]
         for borderWall in borderWalls{
             // create wall node
             let wallNode = createShapeNodeFromModel(borderWall)!
-            
             // add wall to scene
             scene!.addChild(wallNode)
-            
-            
         }
-        
-        
         /********************************
          OBSTACLES
          ********************************/
-        
-        let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: blue, width: 50, height: screenHeight)
+        let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: colorMap["blue"]!, width: 50, height: screenHeight)
         
         // create wall node
         let wallNode = createShapeNodeFromModel(wall)!
@@ -109,8 +103,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
          ********************************/
          
          // create blue and red button
-        let blueButton = Button(x: 300, y: 100, color: blue)
-        let redButton = Button(x: 800, y: 600, color: red)
+        let blueButton = Button(x: 300, y: 100, color: colorMap["blue"]!)
+        let redButton = Button(x: 800, y: 600, color: colorMap["red"]!)
         
         //create blue and red button node
         let blueButtonNode = createShapeNodeFromModel(blueButton)!
@@ -128,12 +122,21 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
         blueButton.listeners.append(wall)
         
         /********************************
+         PORTALS
+         ********************************/
+        let bluePortal = Portal(x: 250, y: 250, color: colorMap["blue"]!)
+        let portalNode = createShapeNodeFromModel(bluePortal)!
+        scene!.addChild(portalNode)
+        portals.append(bluePortal)
+        
+        
+        /********************************
          PLAYERS
          ********************************/
          
          // create players
-        let bluePlayer = Character(x: 100, y: 100, color: blue)
-        let redPlayer = Character(x: 400, y: 700, color: red)
+        let bluePlayer = Character(x: 100, y: 100, color: colorMap["blue"]!)
+        let redPlayer = Character(x: 400, y: 700, color: colorMap["red"]!)
         
         // create player Nodes
         let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
@@ -146,10 +149,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
         // add to players....
         characters.append(bluePlayer)
         characters.append(redPlayer)
-        
-
-    }
     
+    }
     
     func createShapeNodeFromModel(entity: AnyObject) -> SKShapeNode? {
         switch(entity){
@@ -207,6 +208,22 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
             node.physicsBody!.collisionBitMask = GameScene.playerCategory
             node.name = "\(entity.name)"
             return node
+        case let entity as Portal:
+            let node = SKShapeNode()
+            node.path = UIBezierPath(roundedRect: CGRect(x: -50, y: -50, width: 100, height: 100), cornerRadius: 25).CGPath
+            let size = CGSizeMake(100,100)
+            node.fillColor = entity.color
+            node.alpha = 0.3
+            node.userInteractionEnabled = false
+            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+            node.position = self.convertPointToView(entity.position)
+            debugPrint(node.position)
+            node.physicsBody!.dynamic = false
+            node.physicsBody!.categoryBitMask = GameScene.portalCategory
+            node.physicsBody!.contactTestBitMask = GameScene.playerCategory
+            node.physicsBody!.collisionBitMask = GameScene.noCategory
+            node.name = "\(entity.name)"
+            return node
         default: return nil
         }
     }
@@ -220,19 +237,19 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
             debugPrint("A's name: \(name)")
             //is A a player?
             if let character = getCharacterByName(name)  {
-                solvePlayerContactBegan(character, otherNode: B)
+                solvePlayerContactBegan(character, characterNode: A, otherNode: B)
             }
             
         }
         if let name = B.name { //get name of node B, if any
             //is B a player?
             if let character = getCharacterByName(name) {
-                solvePlayerContactBegan(character, otherNode: A)
+                solvePlayerContactBegan(character, characterNode: B, otherNode: A)
             }
         }
     }
     
-    func solvePlayerContactBegan(character: Character, otherNode: SKNode){
+    func solvePlayerContactBegan(character: Character, characterNode: SKNode, otherNode: SKNode){
         debugPrint("solving player contact began")
         
         //get name of other node, if any
@@ -252,9 +269,36 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
                     }
                 }
                 debugPrint("solved contact between \(character.name) and \(button.name)")
+            } else if getPortalByName(name) != nil {
+                debugPrint("touching portal")
+                let colorStr : String = getColorString(character.color)!;
+                gvc?.cm?.sendString("player \(colorStr)")
+                removeCharacter(character)
+                characterNode.removeFromParent()
             }
         }
     }
+    
+    func getColorString(color: UIColor) -> String?{
+        for key in colorMap.keys {
+            if(colorMap[key] == color){
+                return key
+            }
+        }
+        return nil
+    }
+    
+    
+    func removeCharacter(character: Character){
+        var index = 0
+        for c in characters {
+            if(c.name == character.name){
+                characters.removeAtIndex(index)
+            }
+            index += 1
+        }
+    }
+    
     
     func didEndContact(contact: SKPhysicsContact) {
         debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) ended")
@@ -327,6 +371,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         movingCharacter = nil
+        
         //if touch began on player -> player = movingPlayer
         for touch in touches {
             //get touch location and touched node
@@ -413,6 +458,24 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
         return nil
     }
     
+    private func getPortalByName(name: String) -> Portal? {
+        for p in portals {
+            if(p.name == name){
+                return p
+            }
+        }
+        return nil
+    }
+    
+    private func getEntityByName(name: String, entities: [Entity]) -> Entity? {
+        for e in entities {
+            if(e.name == name){
+                return e
+            }
+        }
+        return nil
+    }
+    
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
@@ -435,6 +498,43 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate {
                 node.alpha = 0.15
             }
         }
+    }
+    
+    func spawnCharacter(color: UIColor){
+        // create character
+        let newCharacter = Character(x: 300, y: 600, color: color)
         
+        // create node
+        let node = createShapeNodeFromModel(newCharacter)!
+        
+        // add node to scene
+        scene!.addChild(node)
+        
+        // add to characters....
+        characters.append(newCharacter)
+    }
+
+    //Connection Listener
+    func handleMessage(message: String){
+        //self.view?.scene?.backgroundColor = UIColor.brownColor()
+        let arr = message.componentsSeparatedByString(" ")
+        if(arr[0] == "player"){
+            let color = colorMap[arr[1]]
+            if color != nil {
+                spawnCharacter(color!)
+            }
+        }
+    }
+    
+    func onConnectionStateChange(state : MCSessionState){
+        switch(state) {
+        case .NotConnected: self.view?.scene?.backgroundColor = UIColor.redColor()
+            gvc?.goToMenuScene()
+            break
+        case .Connecting: self.view?.scene?.backgroundColor = UIColor.blueColor()
+            break
+        case .Connected: self.view?.scene?.backgroundColor = UIColor.greenColor()
+            break
+        }
     }
 }
