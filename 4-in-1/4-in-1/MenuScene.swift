@@ -20,24 +20,15 @@ class MenuScene: SKScene, Scene, ConnectionListener {
     var gvc : GameViewController?
     var cm : ConnectivityManager?
     let fontSmall : CGFloat = 28
-    let fontBig : CGFloat  = 38
-    
-    //let menuImage = SKSpriteNode(imageNamed: "mainbg.jpg")
-    
+    let fontBig : CGFloat  = 38   
 
     override func willMoveFromView(view: SKView) {
         //gvc?.cm!.stopHosting()
     }
     
     override func didMoveToView(view: SKView) {
-        // hosting
+        // start hosting
         cm?.startHosting()
-        
-        //menuImage.size.height = self.size.height
-        //menuImage.size.width = self.size.width
-        //menuImage.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-        
-        //self.addChild(menuImage)
         
         self.titleLabel = SKLabelNode(fontNamed: "ChalkboardSE-bold")     //Sätter typsnitt på texten
         self.newGameLabel = SKLabelNode(fontNamed: "ChalkdboardSE-Regular")
@@ -81,37 +72,10 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         self.addChild(self.tutorialLabel!)
         self.addChild(self.settingsLabel!)
         
-        //GameScene = self
-        // setupLayers()
-        
-        //        /* Setup your scene here */
-        //        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        //        myLabel.text = "Hello, World!"
-        //        myLabel.fontSize = 45
-        //        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame))
-        //
-        //        self.addChild(myLabel)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        /* Called when a touch begins */
         self.menuHelper(touches)
-        
-        //for touch in touches {
-        //let location = touch.locationInNode(self)
-        
-        //let sprite = SKSpriteNode(imageNamed:"Spaceship")
-        
-        //sprite.xScale = 0.5
-        //sprite.yScale = 0.5
-        //sprite.position = location
-        
-        //let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-        
-        //sprite.runAction(SKAction.repeatActionForever(action))
-        
-        //self.addChild(sprite)
-        //}
     }
     
     func menuHelper(touches: Set<UITouch>) {
