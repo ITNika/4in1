@@ -33,7 +33,7 @@ class TutorialScene : GameScene {
          ********************************/
          
          // create some colors
-        let blue = ColorManager.colors[ColorManager.blueStr]
+        let blue = ColorManager.colors[ColorManager.blueStr]!
         
         /********************************
         WALLS

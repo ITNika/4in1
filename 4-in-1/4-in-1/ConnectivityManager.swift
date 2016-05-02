@@ -21,6 +21,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     var bvc : MCBrowserViewController!
     private var serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser?
+    private var hasStarted : Bool = false
     
     var gvc : GameViewController?
     var listeners = [ConnectionListener]()
@@ -33,7 +34,6 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         bvc = MCBrowserViewController(serviceType: serviceType, session: session)
         super.init()
         session.delegate = self
-
     }
     
     deinit {
@@ -168,13 +168,17 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     
     //host & join methods
     func startHosting() {
-        debugPrint("started hosting")
-        assistant.start()
+        if(!hasStarted){
+            debugPrint("started hosting")
+            assistant.start()
+            hasStarted = true
+        }
     }
     
     func stopHosting(){
-        debugPrint("stopepd hosting")
+        debugPrint("stopped hosting")
         assistant.stop()
+        hasStarted = false
     }
     
     func joinSession() {

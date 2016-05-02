@@ -524,7 +524,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
     
     func onConnectionStateChange(state : MCSessionState){
         switch(state) {
-        case .NotConnected: self.view?.scene?.backgroundColor = UIColor.redColor()
+        case .NotConnected:
+            self.view?.scene?.backgroundColor = UIColor.redColor()
             gvc?.goToMenuScene()
             break
         case .Connecting: self.view?.scene?.backgroundColor = UIColor.blueColor()

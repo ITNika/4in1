@@ -20,14 +20,11 @@ class MenuScene: SKScene, Scene, ConnectionListener {
     var gvc : GameViewController?
     var cm : ConnectivityManager?
     let fontSmall : CGFloat = 28
-    let fontBig : CGFloat  = 38   
-
-    override func willMoveFromView(view: SKView) {
-        //gvc?.cm!.stopHosting()
-    }
+    let fontBig : CGFloat  = 38
     
     override func didMoveToView(view: SKView) {
-        // start hosting
+        debugPrint("moving to menu scene")
+        // start hosting?
         cm?.startHosting()
         
         self.titleLabel = SKLabelNode(fontNamed: "ChalkboardSE-bold")     //Sätter typsnitt på texten
@@ -85,7 +82,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
                 print("Title Label Pressed")
             }else if nodeAtTouch.name == "new" {
                 print("New game Label Pressed")
-                gvc?.cm?.joinSession()
+                cm?.joinSession()
             }else if nodeAtTouch.name == "tutorial"{
                 print("Tutorial Label pressed")
                 gvc?.goToTutorial()
