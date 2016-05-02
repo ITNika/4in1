@@ -44,7 +44,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         self.serviceBrowser!.stopBrowsingForPeers()
     }
     
-    //vet ej om denna verkligen behövs...användes för testning i tidigt skede
+    //konverterar session state till en string
     func stringValue(state: MCSessionState) -> String {
         switch(state) {
             case .NotConnected: return "NotConnected"

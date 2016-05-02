@@ -38,6 +38,9 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
     var cm : ConnectivityManager?
     var gvc : GameViewController?
     var ipadNr : Int = 0
+    //animations
+    let fadeIn : SKAction  = SKAction.fadeInWithDuration(1)
+    let fadeOut : SKAction  = SKAction.fadeOutWithDuration(1)
     
     override func didMoveToView(view: SKView) {
         debugPrint("did move to game scene view")
@@ -270,23 +273,14 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
                 debugPrint("touching portal")
                 let colorStr : String = ColorManager.getColorString(character.color)!;
                 gvc?.cm?.sendString("player \(colorStr)")
-                removeCharacter(character)
-                characterNode.removeFromParent()
+                characterNode.runAction(fadeOut, completion: {
+                    self.removeCharacter(character)
+                    characterNode.removeFromParent()
+                })
             }
         }
     }
-    
-    /*
-    func getColorString(color: UIColor) -> String?{
-        for key in colorMap.keys {
-            if(colorMap[key] === color){
-                return key
-            }
-        }
-        return nil
-    }*/
-    
-    
+        
     func removeCharacter(character: Character){
         var index = 0
         for c in characters {
@@ -502,12 +496,12 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener {
         
         // create node
         let node = createShapeNodeFromModel(newCharacter)!
-        
-        // add node to scene
-        scene!.addChild(node)
-        
+        node.alpha = 0
         // add to characters....
         characters.append(newCharacter)
+        // add node to scene
+        scene!.addChild(node)
+        node.runAction(fadeIn)
     }
 
     //Connection Listener
