@@ -10,22 +10,25 @@ import Foundation
 import MultipeerConnectivity
 
 class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate, MCSessionDelegate, MCBrowserViewControllerDelegate {
-    /*
-        dns-sd -B _services._dns-sd._udp
-    */
     
-    private let serviceType = "4-in-1"
+    //Multi Peer Connectivity Framework
+    private let serviceType = "4-in-1" //maybe change to "DATX02-12 4-in-1"?
     private let peerId = MCPeerID(displayName: UIDevice.currentDevice().name)
     var session : MCSession!
     private var assistant : MCAdvertiserAssistant!
-    var bvc : MCBrowserViewController!
     private var serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser?
+    // Kontroller till injudings-vyn (som finns inbyggd i iOS)
+    var bvc : MCBrowserViewController!
+    // bool om assistant har startat eller inte
     private var hasStarted : Bool = false
-    
+    // GameViewController, används för navigation mellan vyer och för att visa inbjudnings-vyn.
     var gvc : GameViewController?
+    // Connection listeners, när data kommer från nätverket så får dom det
     var listeners = [ConnectionListener]()
     
+    
+    //init, sätter upp allt för Multi Peer Connectivity Framework
     override init(){
         session = MCSession(peer: self.peerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.Required)
         self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: peerId, discoveryInfo: nil, serviceType: serviceType)
@@ -41,6 +44,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         self.serviceBrowser!.stopBrowsingForPeers()
     }
     
+    //vet ej om denna verkligen behövs...användes för testning i tidigt skede
     func stringValue(state: MCSessionState) -> String {
         switch(state) {
             case .NotConnected: return "NotConnected"
@@ -49,14 +53,14 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         }
     }
     
-    //MCNearbyAdvertiserDelegate
+    //MCNearbyAdvertiserDelegate-protokoll
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?,    invitationHandler: (Bool,
         MCSession) -> Void){
         NSLog("%@", "didReceiveInvitationFromPeer \(peerID)")
         //invitationHandler(true, self.session)
     }
     
-    //MCNearbyServiceBrowserDelegate
+    //MCNearbyServiceBrowserDelegate-protokoll
     func browser(browser: MCNearbyServiceBrowser,foundPeer peerID: MCPeerID,                         withDiscoveryInfo info: [String : String]?){
         NSLog("%@", "foundPeer: \(peerID)")
         //self.serviceBrowser!.invitePeer(peerID, toSession: self.session, withContext: nil, timeout: 20)
@@ -67,7 +71,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         NSLog("%@", "lostPeer: \(peerID)")
     }
     
-    //MCSessionDelegate
+    //MCSessionDelegate-protokoll
     func session(session: MCSession,
                    didReceiveData data: NSData,
                                   fromPeer peerID: MCPeerID){
@@ -100,39 +104,27 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
          // do nothing, not used
     }
     
+    //anropas när connectionen byter state, meddelar alla lyssnare
     func session(session: MCSession,
                    peer peerID: MCPeerID,
                         didChangeState state: MCSessionState){
-                NSLog("%@", "peer \(peerID) didChangeState: \(stringValue(state))")
-        
         for l in listeners {
             l.onConnectionStateChange(state)
         }
-        if state == .Connected {
-            /*
-            var counter = 1
-            for peer in session.connectedPeers {
-                sendString("ipad \(counter)", peers: [peer])
-                counter += 1
-            }*/
-            
-            debugPrint("connected peers: \(session.connectedPeers.count)")
-            for peer in session.connectedPeers {
-                debugPrint("\(peer.displayName) :  \(session.connectedPeers.indexOf(peer))")
-            }
-            //gvc?.goToGameScene()
-        }
+        debugPrint("New State: \(stringValue(state))")
     }
     
-    // funcs
+    //lägg till en lyssnare
     func addConnectionListener(listener : ConnectionListener){
         listeners.append(listener)
     }
     
+    //decoda en string som skickat över nätverket
     func decodeString(data: NSData) -> String {
         return (NSString(data: data, encoding: NSUTF8StringEncoding))! as String
     }
     
+    //skicka en string över nätverket till specifika peers
     func sendString(message: String, peers: [MCPeerID]){
         let data = (message as NSString).dataUsingEncoding(NSUTF8StringEncoding)
         let dataMode = MCSessionSendDataMode.Reliable
@@ -143,12 +135,12 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
             NSLog("%@", "\(error)")
         }
     }
-    
+        //skicka en string över nätverket till alla peers
     func sendString(message: String){
         sendString(message, peers: session.connectedPeers)
     }
     
-    //MCBrowserViewController
+    //MCBrowserViewController-protokolll
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController){
         debugPrint("bvc did finish...")
         gvc?.dismissViewControllerAnimated(true, completion: nil)
@@ -166,7 +158,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         gvc?.goToMenuScene()
     }
     
-    //host & join methods
+    //host & join metoder
     func startHosting() {
         if(!hasStarted){
             debugPrint("started hosting")
@@ -181,9 +173,12 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         hasStarted = false
     }
     
+    // visar inbjudnings-vyn
+    let maximumNumberOfPeersInFourInOneGame = 4 //kanske ska höjas?
+    
     func joinSession() {
         bvc.delegate = self
-        bvc.maximumNumberOfPeers = 4
+        bvc.maximumNumberOfPeers = maximumNumberOfPeersInFourInOneGame
         gvc?.presentViewController(bvc, animated: true, completion: nil)
     }
         
