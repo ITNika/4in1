@@ -18,7 +18,6 @@ class Character: ColoredEntity {
     let name: String
     var position: CGPoint {
         didSet {
-            debugPrint("didSet")
             if node.scene != nil {
                 node.position = (node.scene?.convertPointToView(self.position))!
             }

@@ -12,7 +12,7 @@ import SpriteKit
 class TutorialScene : GameScene {
     var currentTutorial = 1
     let nrOfTutorials = 3
-    /*
+
     override func initGameScene() {
         debugPrint("init tutorial")
         switch(currentTutorial){
@@ -25,6 +25,7 @@ class TutorialScene : GameScene {
             default: gvc?.goToMenuScene()
         }
     }
+     
     func firstTutorial(){
         let offset: CGFloat = 150
         
@@ -32,7 +33,7 @@ class TutorialScene : GameScene {
          COLORS
          ********************************/
          
-         // create some colors
+        // create some colors
         let blue = ColorManager.colors[ColorString.blue]!
         
         /********************************
@@ -43,6 +44,7 @@ class TutorialScene : GameScene {
         scene!.scaleMode = .AspectFill
         let screenWidth: CGFloat = scene!.size.width
         let screenHeight: CGFloat = scene!.size.height
+        
         let borderWalls = [
             Wall(x: 0, y: screenHeight/2 , width: 1, height: screenHeight),
             Wall(x: screenWidth/2, y: 0 , width: screenWidth, height: 1),
@@ -51,33 +53,23 @@ class TutorialScene : GameScene {
             
         ]
         for borderWall in borderWalls{
-            // create wall node
-            let wallNode = createShapeNodeFromModel(borderWall)!
-            
             // add wall to scene
-            scene!.addChild(wallNode)
-            
-            
+            borderWall.node.position = scene!.convertPointToView(borderWall.position)
+            scene!.addChild(borderWall.node)
         }
-        
-        
+
         /********************************
          BUTTONS
          ********************************/
          
          // create blue button
         let blueButton = Button(x: self.view!.frame.width - offset, y: CGRectGetMidY(self.view!.bounds), color: blue)
-        
-        
-        //create blue node
-        let blueButtonNode = createShapeNodeFromModel(blueButton)!
-        
-        
         //add blue button to scene
-        scene!.addChild(blueButtonNode)
-        
+        blueButton.node.position = scene!.convertPointToView(blueButton.position)
+        scene!.addChild(blueButton.node)
         //add blue  button to buttons
         buttons.append(blueButton)
+        blueButton.listeners.append(self)
         
         /********************************
          PLAYERS
@@ -85,25 +77,24 @@ class TutorialScene : GameScene {
          
          // create players
         let bluePlayer = Character(x: offset, y: CGRectGetMidY(self.view!.bounds), color: blue)
-        
-        // create player Nodes
-        let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
-        
+
         // add player node to scene
-        scene!.addChild(bluePlayerNode)
+        bluePlayer.node.position = scene!.convertPointToView(bluePlayer.position)
+        scene!.addChild(bluePlayer.node)
         
         // add to players....
         characters.append(bluePlayer)
         
     }
+     
     func secondTutorial(){
         /********************************
          COLORS
          ********************************/
          
          // create some colors
-        let blue = UIColor.blueColor()
-        let red = UIColor.redColor()
+        let blue = ColorManager.colors[ColorString.blue]!
+        let red = ColorManager.colors[ColorString.red]!
         
         /********************************
         WALLS
@@ -121,13 +112,9 @@ class TutorialScene : GameScene {
             
         ]
         for borderWall in borderWalls{
-            // create wall node
-            let wallNode = createShapeNodeFromModel(borderWall)!
-            
             // add wall to scene
-            scene!.addChild(wallNode)
-            
-            
+            borderWall.node.position = scene!.convertPointToView(borderWall.position)
+            scene!.addChild(borderWall.node)
         }
         
         /********************************
@@ -140,8 +127,14 @@ class TutorialScene : GameScene {
         let redButton = Button(x: self.view!.frame.width - offset, y: CGRectGetMidY(self.view!.bounds) + offset, color: red)
         
         //create blue and red button node
-        let blueButtonNode = createShapeNodeFromModel(blueButton)!
-        let redButtonNode = createShapeNodeFromModel(redButton)!
+        let blueButtonNode = blueButton.node
+        let redButtonNode = redButton.node
+        
+        blueButtonNode.position = scene!.convertPointToView(blueButton.position)
+        redButtonNode.position = scene!.convertPointToView(redButton.position)
+        
+        blueButton.listeners.append(self)
+        redButton.listeners.append(self)
         
         //add blue and red button to scene
         scene!.addChild(blueButtonNode)
@@ -162,8 +155,11 @@ class TutorialScene : GameScene {
         
         
         // create player Nodes
-        let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
-        let redPlayerNode = createShapeNodeFromModel(redPlayer)!
+        let bluePlayerNode = bluePlayer.node
+        let redPlayerNode = redPlayer.node
+        
+        bluePlayerNode.position = scene!.convertPointToView(bluePlayer.position)
+        redPlayerNode.position = scene!.convertPointToView(redPlayer.position)
         
         // add player node to scene
         scene!.addChild(bluePlayerNode)
@@ -173,14 +169,14 @@ class TutorialScene : GameScene {
         characters.append(bluePlayer)
         characters.append(redPlayer)
     }
+     
     func  thirdTutorial(){
         /********************************
          COLORS
          ********************************/
-         
-         // create some colors
-        let blue = UIColor.blueColor()
-        let red = UIColor.redColor()
+        // create some colors
+        let blue = ColorManager.colors[ColorString.blue]!
+        let red = ColorManager.colors[ColorString.red]!
         
         /********************************
         WALLS
@@ -198,24 +194,20 @@ class TutorialScene : GameScene {
             
         ]
         for borderWall in borderWalls{
-            // create wall node
-            let wallNode = createShapeNodeFromModel(borderWall)!
-            
             // add wall to scene
-            scene!.addChild(wallNode)
-            
-            
+            borderWall.node.position = scene!.convertPointToView(borderWall.position)
+            scene!.addChild(borderWall.node)
         }
         
         
         /********************************
          OBSTACLES
          ********************************/
-        
         let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: blue, width: 50, height: screenHeight)
         
         // create wall node
-        let wallNode = createShapeNodeFromModel(wall)!
+        let wallNode = wall.node
+        wallNode.position = scene!.convertPointToView(wall.position)
         
         // add wall to scene
         scene!.addChild(wallNode)
@@ -231,9 +223,14 @@ class TutorialScene : GameScene {
         let blueButton = Button(x: 300, y: 100, color: blue)
         let redButton = Button(x: 800, y: 600, color: red)
         
+
+        
         //create blue and red button node
-        let blueButtonNode = createShapeNodeFromModel(blueButton)!
-        let redButtonNode = createShapeNodeFromModel(redButton)!
+        let blueButtonNode = blueButton.node
+        let redButtonNode = redButton.node
+        
+        blueButtonNode.position = scene!.convertPointToView(blueButton.position)
+        redButtonNode.position = scene!.convertPointToView(redButton.position)
         
         //add blue and red button to scene
         scene!.addChild(blueButtonNode)
@@ -244,19 +241,23 @@ class TutorialScene : GameScene {
         buttons.append(redButton)
         
         //add blue wall as button listener
-        blueButton.listeners.append(wall)
+        blueButton.listeners.append(self)
+        redButton.listeners.append(self)
         
         /********************************
          PLAYERS
          ********************************/
          
-         // create players
+        // create players
         let bluePlayer = Character(x: 100, y: 100, color: blue)
         let redPlayer = Character(x: 400, y: 700, color: red)
         
         // create player Nodes
-        let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
-        let redPlayerNode = createShapeNodeFromModel(redPlayer)!
+        let bluePlayerNode = bluePlayer.node
+        let redPlayerNode = redPlayer.node
+        
+        bluePlayerNode.position = scene!.convertPointToView(bluePlayer.position)
+        redPlayerNode.position = scene!.convertPointToView(redPlayer.position)
         
         // add player node to scene
         scene!.addChild(bluePlayerNode)
@@ -265,13 +266,11 @@ class TutorialScene : GameScene {
         // add to players....
         characters.append(bluePlayer)
         characters.append(redPlayer)
-        
-
     }
     override func gameOver(){
         currentTutorial += 1
         reset()
+        initGameScene()
     }
 
-*/
 }

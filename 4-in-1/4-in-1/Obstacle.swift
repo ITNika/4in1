@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SpriteKit
 
-class Obstacle: ColoredEntity, ButtonListener {
+class Obstacle: ColoredEntity  {
     static private var counter: Int = 0
     static let entityName = "obstacle"
     let id: Int
@@ -23,7 +23,7 @@ class Obstacle: ColoredEntity, ButtonListener {
     var isActive: Bool = true {
         didSet {
             debugPrint(" \(self.name) is active: \(isActive) )")
-            if(isActive){
+            if isActive {
                 node.physicsBody!.categoryBitMask = CategoryMask.wallOnCategory
                 node.alpha = 1
             } else {
@@ -53,11 +53,7 @@ class Obstacle: ColoredEntity, ButtonListener {
         node.physicsBody!.collisionBitMask = CategoryMask.playerCategory
         node.name = "\(self.name)"
     }
-    
-    func onButtonStateChange(state: ButtonState){
-        isActive = (state == ButtonState.NOT_PRESSED)
-    }
-    
+        
     static func newId() -> Int {
         let newId = Obstacle.counter
         Obstacle.counter += 1

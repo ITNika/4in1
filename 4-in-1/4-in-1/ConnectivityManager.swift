@@ -9,8 +9,7 @@
 import Foundation
 import MultipeerConnectivity
 
-class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate, MCSessionDelegate, MCBrowserViewControllerDelegate {
-    
+class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate, MCSessionDelegate, MCBrowserViewControllerDelegate, InGameEventListener, NavigationEventListener {
     //Multi Peer Connectivity Framework
     private let serviceType = "4-in-1" //maybe change to "DATX02-12 4-in-1"?
     private let peerId = MCPeerID(displayName: UIDevice.currentDevice().name)
@@ -26,7 +25,8 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     var gvc : GameViewController?
     // Connection listeners, när data kommer från nätverket så får dom det
     var listeners = [ConnectionListener]()
-    var gameEventListeners = [GameEventListener]()
+    var navigationEventListeners = [NavigationEventListener]()
+    var networkGameEventListeners = [NetworkGameEventListener]()
     
     //init, sätter upp allt för Multi Peer Connectivity Framework
     override init(){
@@ -79,15 +79,15 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         NSLog("%@", "didReceiveData: \(str)")
         
         if let event = GameEvent.fromString(str) {
-            for l in gameEventListeners {
-                l.onEvent(event)
+            for l in networkGameEventListeners {
+                l.onGameEventOverNetwork(event)
+            }
+        } else if let navEvent = GameEvent.Navigation.fromString(str){
+            for l in navigationEventListeners {
+                l.onNavigationEvent(navEvent)
             }
         }
-        /*
-        for l in listeners {
-            l.handleMessage(str)
-        }
-        */
+
     }
     
     func session(session: MCSession,
@@ -122,11 +122,19 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         debugPrint("New State: \(stringValue(state))")
     }
     
-    //lägg till en lyssnare
+    //lägg till lyssnare
     func addConnectionListener(listener : ConnectionListener){
         listeners.append(listener)
     }
     
+    func addNavigationListener(listener : NavigationEventListener){
+        navigationEventListeners.append(listener)
+    }
+    
+    func addNetworkGameEventListener(listener : NetworkGameEventListener){
+        networkGameEventListeners.append(listener)
+    }
+        
     //decoda en string som skickat över nätverket
     func decodeString(data: NSData) -> String {
         return (NSString(data: data, encoding: NSUTF8StringEncoding))! as String
@@ -152,41 +160,23 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     func sendString(message: String){
         sendString(message, peers: session.connectedPeers)
     }
-    // Game Event funcs
-    func addGameEventListener(listener : GameEventListener){
-        gameEventListeners.append(listener)
-    }
-    func fireGameEvent(event: GameEvent, onlyBroadcast: Bool){
-        fireGameEvent(event, peers: session.connectedPeers, onlyBroadcast: onlyBroadcast)
-    }
-    
-    func fireGameEvent(event: GameEvent, peers: [MCPeerID], onlyBroadcast: Bool){
-        sendString(GameEvent.toString(event), peers: peers)
-        if(!onlyBroadcast){
-            for l in gameEventListeners  {
-                l.onEvent(event)
-            }
-        }
-        debugPrint("fire game event: \(GameEvent.toString(event))")
+    // Navigation Event funcs
+    func addNavigationEventListener(listener : NavigationEventListener){
+        navigationEventListeners.append(listener)
     }
     
     //MCBrowserViewController-protokolll
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController){
         debugPrint("bvc did finish...")
         gvc?.dismissViewControllerAnimated(true, completion: nil)
-        //debugPrint("connected peers: \(session.connectedPeers.count)")
         if session.connectedPeers.count > 0 {
-            gvc?.goToGameScene(0)
             for index in 0...self.session.connectedPeers.count-1 {
                 let id: [MCPeerID] = [self.session.connectedPeers[index]]
-                let event = GameEvent.startGame(level: 1, ipadIndex: index+1)
-                fireGameEvent(event, peers: id, onlyBroadcast: true)
+                let event = GameEvent.Navigation.startGame(level: 1, ipadIndex: index+1)
+                broadcastNavigationEvent(event, peers: id)
                 //sendString("\(index+1)", peers: id)
             }
-
-            //sendString("start game") //todo include peers index
-            //fireGameEvent(GameEvent.startGame(level: 0, ipadIndex: 0))
-            //gvc?.goToGameScene()
+            fireNavigationEvent(GameEvent.Navigation.startGame(level: 1, ipadIndex: 0))
         }
     }
     
@@ -219,6 +209,30 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         bvc.maximumNumberOfPeers = maximumNumberOfPeersInFourInOneGame
         gvc?.presentViewController(bvc, animated: true, completion: nil)
     }
-        
+    
+    //InGameEventListener
+    func onInGameEvent(event: GameEvent) {
+        broadcastGameEvent(event)
+    }
+    
+    //Navigation Event funcs
+    func onNavigationEvent(event: GameEvent.Navigation) {
+        for listener in navigationEventListeners {
+            listener.onNavigationEvent(event)
+        }
+    }
+    
+    func fireNavigationEvent(event: GameEvent.Navigation){
+        for listener in navigationEventListeners {
+            listener.onNavigationEvent(event)
+        }
+    }
+    func broadcastGameEvent(event: GameEvent){
+        sendString(GameEvent.toString(event))
+    }
+    
+    func broadcastNavigationEvent(event: GameEvent.Navigation, peers: [MCPeerID]){
+        sendString(GameEvent.Navigation.toString(event), peers: peers)
+    }
 }
 

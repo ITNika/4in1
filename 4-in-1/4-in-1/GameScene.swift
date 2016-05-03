@@ -9,18 +9,20 @@
 import SpriteKit
 import MultipeerConnectivity
 
-class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, GameEventListener {
+class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, InGameEventListener, NetworkGameEventListener, ButtonListener {
     //entities
     var characters = [Character]()
-    var movingCharacter: Character?
     var obstacles = [Obstacle]()
     var buttons = [Button]()
     var portals = [Portal]()
+    var movingCharacter: Character?
     
     //other
     var cm : ConnectivityManager?
     var gvc : GameViewController?
     var ipadNr : Int = 0
+    var gameEventListeners = [InGameEventListener]()
+    
     //animations
     let fadeIn : SKAction  = SKAction.fadeInWithDuration(1)
     let fadeOut : SKAction  = SKAction.fadeOutWithDuration(1)
@@ -41,6 +43,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         // set self to contact delegate
         self.physicsWorld.contactDelegate = self
         //init scene
+        self.reset() // removes all entities and their nodes
         self.initGameScene()
     }
     
@@ -52,8 +55,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         } else {
             self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.yellow]!
         }
-
         scene!.scaleMode = .AspectFill
+        
         /********************************
          WALLS
          ********************************/
@@ -79,13 +82,12 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         // create blue and red button
         let blueButton = Button(x: 300, y: 100, color: ColorManager.colors[ColorString.blue]!)
         let redButton = Button(x: 800, y: 600, color: ColorManager.colors[ColorString.red]!)
-
+        
         //add blue and red button to buttons
         buttons.append(blueButton)
         buttons.append(redButton)
         
-        //add blue wall as button listener
-        blueButton.listeners.append(obstacle)
+    
         
 
         /********************************
@@ -121,10 +123,13 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         for b in buttons {
             b.node.position = self.convertPointToView(b.position)
             self.scene!.addChild(b.node)
+            //add self as button listener
+            b.listeners.append(self)
         }
         for c in characters {
             c.node.position = self.convertPointToView(c.position)
             self.scene!.addChild(c.node)
+            debugPrint("character: \(c.name)")
         }
         for p in portals {
             p.node.position = self.convertPointToView(p.position)
@@ -156,28 +161,28 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
     
     func solvePlayerContactBegan(character: Character, characterNode: SKNode, otherNode: SKNode){
         debugPrint("solving player contact began")
-        
         //get name of other node, if any
         if let name = otherNode.name {
             //is other node a button
             if let button = getButtonByName(name) {
-                if button.state != .PRESSED_RIGHT_COLOR{
+                if button.state != .PRESSED_RIGHT_COLOR {
                     button.state = (character.color === button.color) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
                 }
                 button.visitors = button.visitors + 1
                 if button.state == ButtonState.PRESSED_RIGHT_COLOR && isGameOver() {
                     gameOver()
                 }
-                if button.visitors == 1{
+                /*
+                if button.visitors == 1 {
                     for listener in button.listeners {
                         listener.onButtonStateChange(button.state)
                     }
-                }
+                }*/
                 debugPrint("solved contact between \(character.name) and \(button.name)")
             } else if getPortalByName(name) != nil {
                 debugPrint("touching portal")
                 if let colorStr : ColorString = ColorManager.getColorString(character.color)! {
-                    cm?.fireGameEvent(.sendCharacter(characterColor: colorStr, portalName: "A"), onlyBroadcast: true)
+                    fireGameEvent(.sendCharacter(characterColor: colorStr, portalName: "A"))
                     characterNode.runAction(fadeOut, completion: {
                         self.removeCharacter(character)
                         characterNode.removeFromParent()
@@ -222,7 +227,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
     
     func solvePlayerContactEnded(character: Character, otherNode: SKNode){
         debugPrint("solving player contact ended")
-        
         //get name of other node, if any
         if let name = otherNode.name {
             //is other node a button
@@ -231,7 +235,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
                 if button.visitors == 0{
                     button.state = .NOT_PRESSED
                     for listener in button.listeners {
-                        listener.onButtonStateChange(button.state)
+                        listener.onButtonStateChange(button)
                     }
                 }
                     //Assuming that there is only one player of each color
@@ -255,7 +259,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         movingCharacter = nil
         obstacles = [Obstacle]()
         buttons = [Button]()
-        initGameScene()
+        //initGameScene()
     }
     
     //checks if win condition i met
@@ -296,7 +300,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
         for touch in touches {
             //get touch location and touched node
             let location = touch.locationInNode(scene!)
@@ -336,7 +339,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         }
 
     }
-    
     
     private func getCharacterByName(name: String) -> Character? {
         for c in characters {
@@ -386,7 +388,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
     func spawnCharacter(color: UIColor){
         // create character
         let newCharacter = Character(x: 300, y: 600, color: color)
-        
         // create node
         //let node = createShapeNodeFromModel(newCharacter)!
         newCharacter.node.alpha = 0
@@ -399,17 +400,73 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
     }
     
     // Game Event Listener
-    func onEvent(event: GameEvent) {
+    func onGameEventOverNetwork(event: GameEvent) {
+        debugPrint("recieved game event over network: \(GameEvent.toString(event))")
         switch event {
         case let .sendCharacter(characterColor, _):
             spawnCharacter(ColorManager.colors[characterColor]!)
             break
+        case let .openDoor(color):
+            let door = findDoorByColor(ColorManager.colors[color]!)
+            door?.isActive = false
+            break
+        case let .closeDoor(color):
+            let door = findDoorByColor(ColorManager.colors[color]!)
+            door?.isActive = true
+        }
+    }
+    
+    func onInGameEvent(event: GameEvent) {
         //handle more events later
+        debugPrint("recieved in game event: \(GameEvent.toString(event))")
+        switch event {
+        case let .openDoor(color):
+            let door = findDoorByColor(ColorManager.colors[color]!)
+            door?.isActive = false
+            break
+        case let .closeDoor(color):
+            let door = findDoorByColor(ColorManager.colors[color]!)
+            door?.isActive = true
         default:
             break
         }
     }
     
+    func findDoorByColor(color: UIColor) -> Obstacle? {
+        for o in obstacles {
+            if o.color == color {
+                return o
+            }
+        }
+        return nil
+    }
+    
+    func addGameEventListener(listener : InGameEventListener){
+        gameEventListeners.append(listener)
+    }
+    
+    
+    func fireGameEvent(event: GameEvent){
+        debugPrint("firing game event: \(GameEvent.toString(event))")
+        for listener in gameEventListeners {
+            listener.onInGameEvent(event)
+        }
+    }
+    //Button Listener
+    func onButtonStateChange(button: Button) {
+        debugPrint("\(button.name) has a new state: \(button.state)")
+        switch button.state {
+        case ButtonState.NOT_PRESSED:
+        fireGameEvent(GameEvent.closeDoor(doorColor: ColorManager.getColorString(button.color)!))
+            break
+        case ButtonState.PRESSED_RIGHT_COLOR, ButtonState.PRESSED_WRONG_COLOR:
+        fireGameEvent(GameEvent.openDoor(doorColor: ColorManager.getColorString(button.color)!))
+            break
+        }
+
+    }
+    
+    //Connection listener
     func onConnectionStateChange(state : MCSessionState){
         switch(state) {
         case .NotConnected:

@@ -10,15 +10,40 @@ import UIKit
 import SpriteKit
 import MultipeerConnectivity
 
-class GameViewController: UIViewController, ConnectionListener, GameEventListener {
-    var cm : ConnectivityManager?
-    
+class GameViewController: UIViewController, ConnectionListener, NavigationEventListener {
+    var cm : ConnectivityManager!
+    var menuScene : MenuScene!
+    var gameScene : GameScene!
+    var tutorialScene: TutorialScene!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        //set up connectivity manager
         cm = ConnectivityManager()
-        cm?.addConnectionListener(self)
-        cm?.addGameEventListener(self)
-        cm!.gvc = self
+        cm.addConnectionListener(self)
+        cm.addNavigationListener(self)
+        //cm?.addGameEventListener(self)
+        cm.gvc = self
+        
+        //set up menu scene
+        menuScene = MenuScene(size: view.bounds.size)
+        menuScene.gvc = self
+        menuScene.cm = cm
+        cm?.addConnectionListener(menuScene!)
+        
+        //set up game scene
+        gameScene = GameScene(size: view.bounds.size)
+        gameScene.gvc = self
+        gameScene.cm = cm
+        cm.addConnectionListener(gameScene)
+        cm.addNetworkGameEventListener(gameScene)
+        gameScene.addGameEventListener(cm)
+        gameScene.addGameEventListener(gameScene)
+        
+        //set up tutorial scene
+        tutorialScene = TutorialScene(size: view.bounds.size)
+        tutorialScene.gvc = self
+        tutorialScene.addGameEventListener(tutorialScene)
         goToMenuScene()
     }
 
@@ -27,38 +52,20 @@ class GameViewController: UIViewController, ConnectionListener, GameEventListene
     }
     
     func goToMenuScene(){
-        let scene = MenuScene(size: view.bounds.size)
-        scene.gvc = self
-        scene.cm = cm
-        cm?.addConnectionListener(scene)
-        presentScene(scene)
+        presentScene(menuScene)
     }
     
     func goToGameScene(){
-        let gameScene = GameScene(size: view.bounds.size)
-        gameScene.gvc = self
-        gameScene.cm = cm
-        cm?.addConnectionListener(gameScene)
-        cm?.addGameEventListener(gameScene) 
         presentScene(gameScene)
     }
-       
     
     func goToGameScene(ipadNr: Int){
-        let gameScene = GameScene(size: view.bounds.size)
-        gameScene.gvc = self
         gameScene.ipadNr = ipadNr
-        gameScene.cm = cm
-        cm?.addConnectionListener(gameScene)
-        cm?.addGameEventListener(gameScene)
         presentScene(gameScene)
     }
     
     func goToTutorial(){
-        debugPrint("going to tutorial...")
-        let tutorial = TutorialScene(size: view.bounds.size)
-        tutorial.gvc = self
-        presentScene(tutorial)
+        presentScene(tutorialScene)
     }
     
     func presentScene(scene: SKScene){
@@ -70,8 +77,10 @@ class GameViewController: UIViewController, ConnectionListener, GameEventListene
             scene.scaleMode = .ResizeFill
             skView.presentScene(scene)
     }
+    
     //GameEventListener
-    func onEvent(event: GameEvent) {
+    func onNavigationEvent(event: GameEvent.Navigation) {
+        debugPrint("received navigation event: \(GameEvent.Navigation.toString(event))")
         switch event {
         case let .startGame(_, ipadIndex):
             goToGameScene(ipadIndex)
@@ -79,23 +88,8 @@ class GameViewController: UIViewController, ConnectionListener, GameEventListene
         case .endGame:
             goToMenuScene()
             break
-        default:
-            // do nothing
-            break
         }
     }
-    
-    //Connection Listener
-    /* 
-    func handleMessage(message: String){
-        switch message {
-        case "start game":
-            goToGameScene()
-            break
-        default: break
-            
-        }
-    } */
     
     func onConnectionStateChange(state : MCSessionState){
         //todo

@@ -9,5 +9,5 @@
 import Foundation
 
 protocol ButtonListener {
-    func onButtonStateChange(state: ButtonState)
+    func onButtonStateChange(button: Button)
 }

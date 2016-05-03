@@ -23,7 +23,9 @@ class Button: ColoredEntity {
     
     var state: ButtonState = .NOT_PRESSED {
         didSet {
-            debugPrint("new state: \(self.state)")
+            for listener in listeners {
+                listener.onButtonStateChange(self)
+            }
         }
     }
     

@@ -1,5 +1,5 @@
 //
-//  GameEventListener.swift
+//  NetworkGameEventListener.swift
 //  4-in-1
 //
 //  Created by Alexander on 03/05/16.
@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
-protocol GameEventListener {
-    func onEvent(event: GameEvent)
+protocol NetworkGameEventListener {
+    func onGameEventOverNetwork(event: GameEvent)
 }

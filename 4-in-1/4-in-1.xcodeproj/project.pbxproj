@@ -31,8 +31,10 @@
 		11CAE1CA1CD89777001F34AB /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 11CAE1C81CD89777001F34AB /* spark.png */; };
 		11CAE1CC1CD89F56001F34AB /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CB1CD89F56001F34AB /* GameEvent.swift */; };
 		11CAE1CE1CD8A073001F34AB /* ColorString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CD1CD8A073001F34AB /* ColorString.swift */; };
-		11CAE1D01CD8AC44001F34AB /* GameEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CF1CD8AC44001F34AB /* GameEventListener.swift */; };
+		11CAE1D01CD8AC44001F34AB /* InGameEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CF1CD8AC44001F34AB /* InGameEventListener.swift */; };
 		11CAE1D61CD8EA55001F34AB /* CategoryMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */; };
+		11CAE1D81CD92552001F34AB /* NavigationEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */; };
+		11CAE1DA1CD92B51001F34AB /* NetworkGameEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */; };
 		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
@@ -64,8 +66,10 @@
 		11CAE1C81CD89777001F34AB /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		11CAE1CB1CD89F56001F34AB /* GameEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
 		11CAE1CD1CD8A073001F34AB /* ColorString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorString.swift; sourceTree = "<group>"; };
-		11CAE1CF1CD8AC44001F34AB /* GameEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEventListener.swift; sourceTree = "<group>"; };
+		11CAE1CF1CD8AC44001F34AB /* InGameEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InGameEventListener.swift; sourceTree = "<group>"; };
 		11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryMask.swift; sourceTree = "<group>"; };
+		11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationEventListener.swift; sourceTree = "<group>"; };
+		11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkGameEventListener.swift; sourceTree = "<group>"; };
 		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,7 +153,9 @@
 				11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */,
 				11CAE1B81CCFB989001F34AB /* ConnectivityManager.swift */,
 				11CAE1BE1CD24241001F34AB /* ConnectionListener.swift */,
-				11CAE1CF1CD8AC44001F34AB /* GameEventListener.swift */,
+				11CAE1CF1CD8AC44001F34AB /* InGameEventListener.swift */,
+				11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */,
+				11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -242,16 +248,18 @@
 			files = (
 				110674151C9ABF52007CE749 /* GameScene.swift in Sources */,
 				1106742C1C9AC249007CE749 /* Entity.swift in Sources */,
+				11CAE1D81CD92552001F34AB /* NavigationEventListener.swift in Sources */,
 				11A079711CCF8E8F00B1C7A0 /* Obstacle.swift in Sources */,
 				11A079671CCF8B0D00B1C7A0 /* Scene.swift in Sources */,
 				11CAE1C11CD2918D001F34AB /* Portal.swift in Sources */,
-				11CAE1D01CD8AC44001F34AB /* GameEventListener.swift in Sources */,
+				11CAE1D01CD8AC44001F34AB /* InGameEventListener.swift in Sources */,
 				11A0796D1CCF8E1800B1C7A0 /* ButtonState.swift in Sources */,
 				11A079691CCF8DA700B1C7A0 /* TutorialScene.swift in Sources */,
 				11A0796F1CCF8E5B00B1C7A0 /* ButtonListener.swift in Sources */,
 				E1935A701C9AE951001D9EFC /* Wall.swift in Sources */,
 				110674171C9ABF52007CE749 /* GameViewController.swift in Sources */,
 				11A0796B1CCF8DF200B1C7A0 /* Button.swift in Sources */,
+				11CAE1DA1CD92B51001F34AB /* NetworkGameEventListener.swift in Sources */,
 				11CAE1CC1CD89F56001F34AB /* GameEvent.swift in Sources */,
 				1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */,
 				E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */,
