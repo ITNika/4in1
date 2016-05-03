@@ -10,24 +10,6 @@ import SpriteKit
 import MultipeerConnectivity
 
 class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, GameEventListener {
-    
-    /*  CONTACT   | player    |   button  |   Wall      |      /* COLLISION   | player    |   button  | Wall(on/off)|
-    -----------------------------------------------------       --------------------------------------------------
-    | player      |  yes      |   yes     | no          |      | player       |  yes      |   yes     | yes/no      |
-    -----------------------------------------------------       --------------------------------------------------
-    | button      |  yes      |   -       | -           |      | button       |  no       |   -       | -           |
-    -----------------------------------------------------      --------------------------------------------------
-    | obstacles   |  no       |   -       | -           |      | obstacles    |  no       |   -       | -           |
-     ----------------------------------------------------*/    -----------------------------------------------------*/
-    
-    //Category mask values
-    static let noCategory: UInt32 = 0x1 << 0
-    static let playerCategory: UInt32  = 0x1 << 1
-    static let buttonCategory: UInt32  = 0x1 << 2
-    static let wallOnCategory: UInt32 = 0x1 << 3
-    static let wallOffCategory: UInt32 = 0x1 << 4
-    static let portalCategory: UInt32 = 0x1 << 5 // todo ^- add portal to tables
-    
     //entities
     var characters = [Character]()
     var movingCharacter: Character?
@@ -149,170 +131,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
             self.scene!.addChild(p.node)
         }
         
-
-        /*
-        /********************************
-        WALLS
-        ********************************/
-
-        let screenWidth: CGFloat = scene!.size.width
-        let screenHeight: CGFloat = scene!.size.height
-        let borderWalls = [
-            Wall(x: 0, y: screenHeight/2 , width: 1, height: screenHeight),
-            Wall(x: screenWidth/2, y: 0 , width: screenWidth, height: 1),
-            Wall(x: screenWidth, y: screenHeight/2 , width: 1, height: screenHeight),
-            Wall(x: screenWidth/2, y: screenHeight , width: screenWidth, height: 1)
-        ]
-        for borderWall in borderWalls{
-            // create wall node
-            let wallNode = createShapeNodeFromModel(borderWall)!
-            // add wall to scene
-            scene!.addChild(wallNode)
-        }
-        /********************************
-         OBSTACLES
-         ********************************/
-        let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: ColorManager.colors[ColorString.blue]!, width: 75, height: screenHeight)
-        
-        // create wall node
-        //let wallNode = createShapeNodeFromModel(wall)!
-        
-        // add wall to scene
-        scene!.addChild(wallNode)
-        
-        //add to abstacles
-        obstacles.append(wall)
-        
-        /********************************
-         BUTTONS
-         ********************************/
-         
-        // create blue and red button
-        let blueButton = Button(x: 300, y: 100, color: ColorManager.colors[ColorString.blue]!)
-        let redButton = Button(x: 800, y: 600, color: ColorManager.colors[ColorString.red]!)
-        
-        //create blue and red button node
-        //let blueButtonNode = createShapeNodeFromModel(blueButton)!
-        //let redButtonNode = createShapeNodeFromModel(redButton)!
-        
-        //add blue and red button to scene
-        scene!.addChild(blueButtonNode)
-        scene!.addChild(redButtonNode)
-        
-        //add blue and red button to buttons
-        buttons.append(blueButton)
-        buttons.append(redButton)
-        
-        //add blue wall as button listener
-        blueButton.listeners.append(wall)
-        
-        /********************************
-         PORTALS
-         ********************************/
-        //let bluePortal = Portal(x: 250, y: 250, color: ColorManager.colors[ColorString.blue]!)
-        //let portalNode = createShapeNodeFromModel(bluePortal)!
-        scene!.addChild(portalNode)
-        portals.append(bluePortal)
-        
-        
-        /********************************
-         PLAYERS
-         ********************************/
-         
-         // create players
-        let bluePlayer = Character(x: 100, y: 100, color: ColorManager.colors[ColorString.blue]!)
-        let redPlayer = Character(x: 400, y: 700, color: ColorManager.colors[ColorString.red]!)
-        
-        // create player Nodes
-        //let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
-        //let redPlayerNode = createShapeNodeFromModel(redPlayer)!
-        
-        // add player node to scene
-        scene!.addChild(bluePlayerNode)
-        scene!.addChild(redPlayerNode)
-        
-        // add to players....
-        characters.append(bluePlayer)
-        characters.append(redPlayer)
-         */
     }
-    
-    /*
-    func createShapeNodeFromModel(entity: AnyObject) -> SKShapeNode? {
-        switch(entity){
-        case let entity as Character:
-            let playerRadius: CGFloat = 50
-            let node = SKShapeNode(circleOfRadius: playerRadius)
-            node.fillColor = entity.color
-            //node.userInteractionEnabled = false
-            node.physicsBody = SKPhysicsBody(circleOfRadius: playerRadius)
-            node.position = self.convertPointToView(entity.position)
-            node.physicsBody!.categoryBitMask = GameScene.playerCategory
-            node.physicsBody!.contactTestBitMask = GameScene.playerCategory | GameScene.buttonCategory
-            node.physicsBody!.collisionBitMask = GameScene.playerCategory | GameScene.wallOnCategory
-            node.name = "\(entity.name)"
-            return node
-        case let entity as Obstacle:
-            let size = CGSizeMake(entity.width, entity.height)
-            let node = SKShapeNode(rectOfSize: size) //is later set the right size
-            node.fillColor = entity.color
-            node.userInteractionEnabled = false
-            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
-            node.position = self.convertPointToView(entity.position)
-            node.physicsBody!.dynamic = false
-            node.physicsBody!.categoryBitMask = GameScene.wallOnCategory
-            node.physicsBody!.contactTestBitMask = GameScene.noCategory
-            node.physicsBody!.collisionBitMask = GameScene.playerCategory
-            node.name = "\(entity.name)"
-            return node
-        case let entity as Button:
-            let size = CGSizeMake(100,100)
-            let node = SKShapeNode(rectOfSize: size)
-            node.fillColor = entity.color
-            node.userInteractionEnabled = false
-            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
-            node.position = self.convertPointToView(entity.position)
-
-            node.physicsBody!.dynamic = false
-            node.physicsBody!.categoryBitMask = GameScene.buttonCategory
-            node.physicsBody!.contactTestBitMask = GameScene.playerCategory
-            node.physicsBody!.collisionBitMask = GameScene.noCategory
-            node.name = "\(entity.name)"
-            return node
-        case let entity as Wall:
-            let size = CGSizeMake(entity.width, entity.height)
-            let node = SKShapeNode(rectOfSize: size)
-            node.fillColor = UIColor.whiteColor()
-            node.userInteractionEnabled = false
-            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
-            node.position = self.convertPointToView(entity.position)
-
-            node.physicsBody!.dynamic = false
-            node.physicsBody!.categoryBitMask = GameScene.wallOnCategory
-            node.physicsBody!.contactTestBitMask = GameScene.noCategory
-            node.physicsBody!.collisionBitMask = GameScene.playerCategory
-            node.name = "\(entity.name)"
-            return node
-        case let entity as Portal:
-            let node = SKShapeNode()
-            node.path = UIBezierPath(roundedRect: CGRect(x: -50, y: -50, width: 100, height: 100), cornerRadius: 25).CGPath
-            let size = CGSizeMake(100,100)
-            node.fillColor = entity.color
-            node.alpha = 0.3
-            node.userInteractionEnabled = false
-            node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
-            node.position = self.convertPointToView(entity.position)
-  
-            node.physicsBody!.dynamic = false
-            node.physicsBody!.categoryBitMask = GameScene.portalCategory
-            node.physicsBody!.contactTestBitMask = GameScene.playerCategory
-            node.physicsBody!.collisionBitMask = GameScene.noCategory
-            node.name = "\(entity.name)"
-            return node
-        default: return nil
-        }
-    }
-    */
+ 
     func didBeginContact(contact: SKPhysicsContact) {
         debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) began")
         let A = contact.bodyA.node!
@@ -321,7 +141,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         if let name = A.name { //get name of node A, if any
             debugPrint("A's name: \(name)")
             //is A a player?
-            if let character = getCharacterByName(name)  {
+            if let character = getCharacterByName(name) {
                 solvePlayerContactBegan(character, characterNode: A, otherNode: B)
             }
             
@@ -366,7 +186,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
                     debugPrint("did not find color")
                 }
                 //gvc?.cm?.sendString("player \(colorStr)")
-
             }
         }
     }
@@ -564,33 +383,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         return nil
     }
     
-    /*
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-        
-        //update character nodes
-        
-        for c in characters {
-            if let node = self.childNodeWithName(c.name)  {
-                node.position = self.convertPointToView(c.position)
-            }
-        }
-        
-        // update obstacle nodes
-        for obstacle in obstacles {
-            let name = obstacle.name
-            let node = scene!.childNodeWithName(name)!
-            if(obstacle.isActive){
-                node.physicsBody!.categoryBitMask = GameScene.wallOnCategory
-                node.alpha = 1
-            } else {
-                node.physicsBody!.categoryBitMask = GameScene.wallOffCategory
-                node.alpha = 0.15
-            }
-        }
-    }
- */
-    
     func spawnCharacter(color: UIColor){
         // create character
         let newCharacter = Character(x: 300, y: 600, color: color)
@@ -617,22 +409,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
             break
         }
     }
-    
-    //Connection Listener
-    /*
-    func handleMessage(message: String){
-        //self.view?.scene?.backgroundColor = UIColor.brownColor()
-        let arr = message.componentsSeparatedByString(" ")
-        if(arr[0] == "player"){
-            if let color = ColorString(rawValue: arr[1]) {
-                let color = ColorManager.colors[color]
-                if color != nil {
-                    spawnCharacter(color!)
-                }
-            }
-
-        }
-    }*/
     
     func onConnectionStateChange(state : MCSessionState){
         switch(state) {
