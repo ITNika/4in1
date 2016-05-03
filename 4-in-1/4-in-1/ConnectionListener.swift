@@ -10,7 +10,6 @@ import Foundation
 import MultipeerConnectivity
 
 protocol ConnectionListener {
-    var cm : ConnectivityManager? {get set}
-    func handleMessage(message : String)
+    //func handleMessage(message : String)
     func onConnectionStateChange(state : MCSessionState)
 }

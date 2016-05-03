@@ -10,13 +10,14 @@ import UIKit
 import SpriteKit
 import MultipeerConnectivity
 
-class GameViewController: UIViewController, ConnectionListener {
+class GameViewController: UIViewController, ConnectionListener, GameEventListener {
     var cm : ConnectivityManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cm = ConnectivityManager()
         cm?.addConnectionListener(self)
+        cm?.addGameEventListener(self)
         cm!.gvc = self
         goToMenuScene()
     }
@@ -38,6 +39,7 @@ class GameViewController: UIViewController, ConnectionListener {
         gameScene.gvc = self
         gameScene.cm = cm
         cm?.addConnectionListener(gameScene)
+        cm?.addGameEventListener(gameScene) 
         presentScene(gameScene)
     }
        
@@ -46,7 +48,9 @@ class GameViewController: UIViewController, ConnectionListener {
         let gameScene = GameScene(size: view.bounds.size)
         gameScene.gvc = self
         gameScene.ipadNr = ipadNr
+        gameScene.cm = cm
         cm?.addConnectionListener(gameScene)
+        cm?.addGameEventListener(gameScene)
         presentScene(gameScene)
     }
     
@@ -65,9 +69,24 @@ class GameViewController: UIViewController, ConnectionListener {
             skView.ignoresSiblingOrder = true
             scene.scaleMode = .ResizeFill
             skView.presentScene(scene)
-
     }
+    //GameEventListener
+    func onEvent(event: GameEvent) {
+        switch event {
+        case let .startGame(_, ipadIndex):
+            goToGameScene(ipadIndex)
+            break
+        case .endGame:
+            goToMenuScene()
+            break
+        default:
+            // do nothing
+            break
+        }
+    }
+    
     //Connection Listener
+    /* 
     func handleMessage(message: String){
         switch message {
         case "start game":
@@ -76,7 +95,7 @@ class GameViewController: UIViewController, ConnectionListener {
         default: break
             
         }
-    }
+    } */
     
     func onConnectionStateChange(state : MCSessionState){
         //todo

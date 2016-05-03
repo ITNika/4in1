@@ -1,0 +1,73 @@
+//
+//  GameEvents.swift
+//  4-in-1
+//
+//  Created by Alexander on 03/05/16.
+//  Copyright © 2016 Chalmers. All rights reserved.
+//
+
+import Foundation
+
+
+enum GameEvent {
+    
+    case sendCharacter(characterColor: ColorString, portalName: String)
+    case openDoor(doorColor: ColorString)
+    case closeDoor(doorColor: ColorString)
+    case startGame(level: Int, ipadIndex: Int)
+    case endGame
+    
+    static func toString(event: GameEvent) -> String {
+        switch event {
+        case let .sendCharacter(characterColor, portalName):
+            return "sendCharacter \(characterColor.rawValue) \(portalName)"
+        case let .openDoor(doorColor):
+            return "openDoor \(doorColor.rawValue)"
+        case let .startGame(level, ipadIndex):
+            return "startGame \(level) \(ipadIndex)"
+        case .endGame:
+            return "endGame"
+        case let .closeDoor(doorColor):
+            return "closeDoor \(doorColor.rawValue)"
+        }
+    }
+    
+    static func fromString(string: String) -> GameEvent? {
+        if string == "endGame" { // test for end game
+            return .endGame
+        }
+        
+        let split = string.componentsSeparatedByString(" ")
+        
+        if split.count == 2 { // test for openDoor
+            if split[0] == "openDoor" {
+                if let color = ColorString(rawValue: split[1]) {
+                   return .openDoor(doorColor: color)
+                }
+            } else if split[0] == "closeDoor" { //test for close door
+                if let color = ColorString(rawValue: split[1]) {
+                    return .closeDoor(doorColor: color)
+                }
+            }
+        }
+        
+        if split.count == 3 { // test for sendCharacter or startGame
+            if split[0] == "sendCharacter" {
+                if let color1 = ColorString(rawValue: split[1]) {
+                    return .sendCharacter(characterColor: color1, portalName: split[2])
+                }
+            } else if split[0] == "startGame" {
+                if let int1 = Int(split[1]) {
+                    if let int2 = Int(split[2]) {
+                        return .startGame(level: int1, ipadIndex: int2)
+                    }
+                }
+            
+            }
+        }
+        
+        return nil
+    }
+    
+    
+}

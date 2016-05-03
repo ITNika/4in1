@@ -10,4 +10,5 @@ import Foundation
 
 protocol Scene {
     var gvc: GameViewController? {get set}
+    var cm : ConnectivityManager? {get set}
 }

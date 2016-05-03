@@ -69,6 +69,21 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         self.addChild(self.tutorialLabel!)
         self.addChild(self.settingsLabel!)
         
+
+        /*************
+         particles
+        **************/
+        let path = NSBundle.mainBundle().pathForResource("particles", ofType: "sks")
+        let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(path!) as! SKEmitterNode
+        
+        particle.position = self.convertPointToView(CGPointMake(100,100))
+        particle.targetNode = self.scene
+        
+        particle.particleColorSequence = nil;
+        particle.particleColorBlendFactor = 1.0;
+        particle.particleColor = ColorManager.colors[ColorString.purple]!;
+        self.addChild(particle)
+    
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -97,9 +112,10 @@ class MenuScene: SKScene, Scene, ConnectionListener {
     }
     
     //Connection Listener
+    /*
     func handleMessage(message: String){
         // do something?
-    }
+    }*/
     
     func onConnectionStateChange(state : MCSessionState){
         switch(state) {
