@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SpriteKit
 
 class Obstacle: ColoredEntity, ButtonListener {
     static private var counter: Int = 0
@@ -15,14 +16,21 @@ class Obstacle: ColoredEntity, ButtonListener {
     let id: Int
     let name: String
     var position: CGPoint
+        var node: SKShapeNode = SKShapeNode()
     let color: UIColor
     var width, height: CGFloat
     
     var isActive: Bool = true {
         didSet {
             debugPrint(" \(self.name) is active: \(isActive) )")
+            if(isActive){
+                node.physicsBody!.categoryBitMask = CategoryMask.wallOnCategory
+                node.alpha = 1
+            } else {
+                node.physicsBody!.categoryBitMask = CategoryMask.wallOffCategory
+                node.alpha = 0.15
+            }
         }
-        
     }
     
     init(x: CGFloat, y: CGFloat, color: UIColor, width: CGFloat, height: CGFloat) {
@@ -32,6 +40,18 @@ class Obstacle: ColoredEntity, ButtonListener {
         self.color = color
         self.id = Obstacle.newId()
         self.name = "\(Obstacle.entityName) \(self.id)"
+        
+        //init node
+        let size = CGSizeMake(self.width, self.height)
+        node = SKShapeNode(rectOfSize: size) //is later set the right size
+        node.fillColor = self.color
+        node.userInteractionEnabled = false
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        node.physicsBody!.dynamic = false
+        node.physicsBody!.categoryBitMask = CategoryMask.wallOnCategory
+        node.physicsBody!.contactTestBitMask = CategoryMask.noCategory
+        node.physicsBody!.collisionBitMask = CategoryMask.playerCategory
+        node.name = "\(self.name)"
     }
     
     func onButtonStateChange(state: ButtonState){

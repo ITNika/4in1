@@ -12,7 +12,7 @@ import SpriteKit
 class TutorialScene : GameScene {
     var currentTutorial = 1
     let nrOfTutorials = 3
-    
+    /*
     override func initGameScene() {
         debugPrint("init tutorial")
         switch(currentTutorial){
@@ -273,5 +273,5 @@ class TutorialScene : GameScene {
         reset()
     }
 
-
+*/
 }

@@ -8,8 +8,10 @@
 
 import Foundation
 import UIKit
+import SpriteKit
 
 protocol Entity {
+    var node: SKShapeNode {get set}
     var id: Int {get}
     var name: String {get}
     var position: CGPoint {get set}

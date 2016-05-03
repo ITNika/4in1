@@ -8,12 +8,14 @@
 
 import Foundation
 import UIKit
+import SpriteKit
 
 class Button: ColoredEntity {
     static private var counter: Int = 0
     static let entityName = "button"
     let id: Int
     let name: String
+    var node: SKShapeNode
     var position: CGPoint
     let color: UIColor
     //added a property to count the number of players on a button
@@ -33,6 +35,18 @@ class Button: ColoredEntity {
         self.name = "\(Button.entityName) \(self.id)"
         self.position = CGPointMake(x,y)
         self.visitors = 0
+        
+        //init node
+        let size = CGSizeMake(100,100)
+        node = SKShapeNode(rectOfSize: size)
+        node.fillColor = self.color
+        node.userInteractionEnabled = false
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        node.physicsBody!.dynamic = false
+        node.physicsBody!.categoryBitMask = CategoryMask.buttonCategory
+        node.physicsBody!.contactTestBitMask = CategoryMask.playerCategory
+        node.physicsBody!.collisionBitMask = CategoryMask.noCategory
+        node.name = "\(self.name)"
     }
     
     func unpress(){

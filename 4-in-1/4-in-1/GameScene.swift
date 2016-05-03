@@ -68,13 +68,93 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         if ipadNr % 2 == 0 {
             self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.salmon]!
         } else {
-            self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.blue]!
+            self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.yellow]!
         }
+
+        scene!.scaleMode = .AspectFill
+        /********************************
+         WALLS
+         ********************************/
+        let screenWidth: CGFloat = scene!.size.width
+        let screenHeight: CGFloat = scene!.size.height
+        var walls = [Wall]()
+        walls.append(Wall(x: 0, y: screenHeight/2 , width: 1, height: screenHeight))
+        walls.append(Wall(x: screenWidth/2, y: 0 , width: screenWidth, height: 1))
+        walls.append(Wall(x: screenWidth, y: screenHeight/2 , width: 1, height: screenHeight))
+        walls.append(Wall(x: screenWidth/2, y: screenHeight , width: screenWidth, height: 1))
+
+        /********************************
+         OBSTACLES
+         ********************************/
+        let obstacle = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: ColorManager.colors[ColorString.blue]!, width: 75, height: screenHeight)
+        obstacles.append(obstacle)
+        
+  
+        /********************************
+         BUTTONS
+         ********************************/
+        
+        // create blue and red button
+        let blueButton = Button(x: 300, y: 100, color: ColorManager.colors[ColorString.blue]!)
+        let redButton = Button(x: 800, y: 600, color: ColorManager.colors[ColorString.red]!)
+
+        //add blue and red button to buttons
+        buttons.append(blueButton)
+        buttons.append(redButton)
+        
+        //add blue wall as button listener
+        blueButton.listeners.append(obstacle)
+        
+
+        /********************************
+         PORTALS
+         ********************************/
+        let bluePortal = Portal(x: 250, y: 250, color: ColorManager.colors[ColorString.blue]!)
+        portals.append(bluePortal)
+        
+        /********************************
+         PLAYERS
+         ********************************/
+        
+        // create players
+        let bluePlayer = Character(x: 100, y: 100, color: ColorManager.colors[ColorString.blue]!)
+        let redPlayer = Character(x: 400, y: 700, color: ColorManager.colors[ColorString.red]!)
+        
+        // add to players....
+        characters.append(bluePlayer)
+        characters.append(redPlayer)
+        
+        /************
+        ADD ALL NODES
+        *************/
+        
+        for wall in walls {
+            wall.node.position = self.convertPointToView(wall.position)
+            self.scene!.addChild(wall.node)
+        }
+        for o in obstacles {
+            o.node.position = self.convertPointToView(o.position)
+            self.scene!.addChild(o.node)
+        }
+        for b in buttons {
+            b.node.position = self.convertPointToView(b.position)
+            self.scene!.addChild(b.node)
+        }
+        for c in characters {
+            c.node.position = self.convertPointToView(c.position)
+            self.scene!.addChild(c.node)
+        }
+        for p in portals {
+            p.node.position = self.convertPointToView(p.position)
+            self.scene!.addChild(p.node)
+        }
+        
+
+        /*
         /********************************
         WALLS
         ********************************/
-        // create wall model
-        scene!.scaleMode = .AspectFill
+
         let screenWidth: CGFloat = scene!.size.width
         let screenHeight: CGFloat = scene!.size.height
         let borderWalls = [
@@ -95,7 +175,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         let wall = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: ColorManager.colors[ColorString.blue]!, width: 75, height: screenHeight)
         
         // create wall node
-        let wallNode = createShapeNodeFromModel(wall)!
+        //let wallNode = createShapeNodeFromModel(wall)!
         
         // add wall to scene
         scene!.addChild(wallNode)
@@ -112,8 +192,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         let redButton = Button(x: 800, y: 600, color: ColorManager.colors[ColorString.red]!)
         
         //create blue and red button node
-        let blueButtonNode = createShapeNodeFromModel(blueButton)!
-        let redButtonNode = createShapeNodeFromModel(redButton)!
+        //let blueButtonNode = createShapeNodeFromModel(blueButton)!
+        //let redButtonNode = createShapeNodeFromModel(redButton)!
         
         //add blue and red button to scene
         scene!.addChild(blueButtonNode)
@@ -129,8 +209,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         /********************************
          PORTALS
          ********************************/
-        let bluePortal = Portal(x: 250, y: 250, color: ColorManager.colors[ColorString.blue]!)
-        let portalNode = createShapeNodeFromModel(bluePortal)!
+        //let bluePortal = Portal(x: 250, y: 250, color: ColorManager.colors[ColorString.blue]!)
+        //let portalNode = createShapeNodeFromModel(bluePortal)!
         scene!.addChild(portalNode)
         portals.append(bluePortal)
         
@@ -144,8 +224,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         let redPlayer = Character(x: 400, y: 700, color: ColorManager.colors[ColorString.red]!)
         
         // create player Nodes
-        let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
-        let redPlayerNode = createShapeNodeFromModel(redPlayer)!
+        //let bluePlayerNode = createShapeNodeFromModel(bluePlayer)!
+        //let redPlayerNode = createShapeNodeFromModel(redPlayer)!
         
         // add player node to scene
         scene!.addChild(bluePlayerNode)
@@ -154,8 +234,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         // add to players....
         characters.append(bluePlayer)
         characters.append(redPlayer)
+         */
     }
     
+    /*
     func createShapeNodeFromModel(entity: AnyObject) -> SKShapeNode? {
         switch(entity){
         case let entity as Character:
@@ -230,7 +312,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         default: return nil
         }
     }
-    
+    */
     func didBeginContact(contact: SKPhysicsContact) {
         debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) began")
         let A = contact.bodyA.node!
@@ -482,9 +564,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
         return nil
     }
     
-
-
-    
+    /*
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
@@ -509,19 +589,21 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, G
             }
         }
     }
+ */
     
     func spawnCharacter(color: UIColor){
         // create character
         let newCharacter = Character(x: 300, y: 600, color: color)
         
         // create node
-        let node = createShapeNodeFromModel(newCharacter)!
-        node.alpha = 0
+        //let node = createShapeNodeFromModel(newCharacter)!
+        newCharacter.node.alpha = 0
+        newCharacter.node.position = self.convertPointToView(newCharacter.position)
         // add to characters....
         characters.append(newCharacter)
         // add node to scene
-        scene!.addChild(node)
-        node.runAction(fadeIn)
+        scene!.addChild(newCharacter.node)
+        newCharacter.node.runAction(fadeIn)
     }
     
     // Game Event Listener

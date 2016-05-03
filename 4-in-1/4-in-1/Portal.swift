@@ -14,6 +14,7 @@ class Portal: ColoredEntity {
     static let entityName = "portal"
     let id: Int
     let name: String
+    var node: SKShapeNode = SKShapeNode()
     var position: CGPoint
     let color: UIColor
     
@@ -22,6 +23,20 @@ class Portal: ColoredEntity {
         self.color = color
         self.id = Portal.newId()
         self.name = "\(Portal.entityName) \(self.id)"
+        
+        //init node
+        node = SKShapeNode()
+        node.path = UIBezierPath(roundedRect: CGRect(x: -50, y: -50, width: 100, height: 100), cornerRadius: 25).CGPath
+        let size = CGSizeMake(100,100)
+        node.fillColor = self.color
+        node.alpha = 0.3
+        node.userInteractionEnabled = false
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        node.physicsBody!.dynamic = false
+        node.physicsBody!.categoryBitMask = CategoryMask.portalCategory
+        node.physicsBody!.contactTestBitMask = CategoryMask.playerCategory
+        node.physicsBody!.collisionBitMask = CategoryMask.noCategory
+        node.name = "\(self.name)"
     }
     
     static func newId() -> Int {

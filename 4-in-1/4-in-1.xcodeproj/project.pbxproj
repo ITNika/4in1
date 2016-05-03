@@ -32,6 +32,7 @@
 		11CAE1CC1CD89F56001F34AB /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CB1CD89F56001F34AB /* GameEvent.swift */; };
 		11CAE1CE1CD8A073001F34AB /* ColorString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CD1CD8A073001F34AB /* ColorString.swift */; };
 		11CAE1D01CD8AC44001F34AB /* GameEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1CF1CD8AC44001F34AB /* GameEventListener.swift */; };
+		11CAE1D61CD8EA55001F34AB /* CategoryMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */; };
 		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		11CAE1CB1CD89F56001F34AB /* GameEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
 		11CAE1CD1CD8A073001F34AB /* ColorString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorString.swift; sourceTree = "<group>"; };
 		11CAE1CF1CD8AC44001F34AB /* GameEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEventListener.swift; sourceTree = "<group>"; };
+		11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryMask.swift; sourceTree = "<group>"; };
 		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +160,7 @@
 				11CAE1C51CD7A60A001F34AB /* ColorManager.swift */,
 				11CAE1CB1CD89F56001F34AB /* GameEvent.swift */,
 				11CAE1CD1CD8A073001F34AB /* ColorString.swift */,
+				11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				11CAE1C61CD7A60A001F34AB /* ColorManager.swift in Sources */,
 				11CAE1B91CCFB989001F34AB /* ConnectivityManager.swift in Sources */,
 				1106742A1C9AC1C7007CE749 /* Character.swift in Sources */,
+				11CAE1D61CD8EA55001F34AB /* CategoryMask.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
