@@ -11,8 +11,10 @@ import Foundation
 enum GameEvent {
 
         case sendCharacter(characterColor: ColorString, portalColor: ColorString)
+        case winning(winning: Bool, ipadNr: Int)
         case openDoor(doorColor: ColorString)
         case closeDoor(doorColor: ColorString)
+        case gameOver
         
         static func toString(event: GameEvent) -> String {
             switch event {
@@ -22,12 +24,18 @@ enum GameEvent {
                 return "openDoor \(doorColor.rawValue)"
             case let .closeDoor(doorColor):
                 return "closeDoor \(doorColor.rawValue)"
+         case let .winning(winning, ipadNr):
+                return "winning \(winning) ipad \(ipadNr)"
+            case .gameOver:
+                return "gameOver"
             }
         }
         
         static func fromString(string: String) -> GameEvent? {
             let split = string.componentsSeparatedByString(" ")
-            
+            if string == "gameOver" { //test for gameOver
+                return GameEvent.gameOver
+            }
             if split.count == 2 { // test for openDoor
                 if split[0] == "openDoor" {
                     if let color = ColorString(rawValue: split[1]) {
@@ -49,6 +57,15 @@ enum GameEvent {
                     }
                 }
             }
+            if split.count == 4  { //test for winning
+                if split[0] == "winning" && split[2] == "ipad" {
+                    let winning = ("true" == split[1]) ? true : false
+                    if let ipadNr = Int(split[3]){
+                        return .winning(winning: winning, ipadNr: ipadNr)
+                    }
+                 }
+            }
+            
             return nil
         }
 

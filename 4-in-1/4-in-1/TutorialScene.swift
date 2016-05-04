@@ -267,7 +267,7 @@ class TutorialScene : GameScene {
         characters.append(bluePlayer)
         characters.append(redPlayer)
     }
-    override func gameOver(){
+    func gameOver(){
         currentTutorial += 1
         reset()
         initGameScene()

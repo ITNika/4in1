@@ -27,7 +27,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     var listeners = [ConnectionListener]()
     var navigationEventListeners = [NavigationEventListener]()
     var networkGameEventListeners = [NetworkGameEventListener]()
-    
+
     
     
     //init, sätter upp allt för Multi Peer Connectivity Framework
@@ -81,8 +81,14 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         NSLog("%@", "didReceiveData: \(str)")
         
         if let event = GameEvent.fromString(str) {
-            for l in networkGameEventListeners {
-                l.onGameEventOverNetwork(event)
+            switch event {
+            case .gameOver:
+                fireNavigationEvent(GameEvent.Navigation.endGame)
+                break
+            default:
+                for l in networkGameEventListeners {
+                    l.onGameEventOverNetwork(event)
+                }
             }
         } else if let navEvent = GameEvent.Navigation.fromString(str){
             for l in navigationEventListeners {
@@ -171,14 +177,16 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController){
         debugPrint("bvc did finish...")
         gvc?.dismissViewControllerAnimated(true, completion: nil)
+
         if session.connectedPeers.count > 0 {
+            let numberOfplayers = session.connectedPeers.count + 1
             for index in 0...self.session.connectedPeers.count-1 {
                 let id: [MCPeerID] = [self.session.connectedPeers[index]]
-                let event = GameEvent.Navigation.startGame(level: 1, ipadIndex: index+1)
+                let event = GameEvent.Navigation.startGame(level: numberOfplayers, ipadIndex: index+1)
                 broadcastNavigationEvent(event, peers: id)
                 //sendString("\(index+1)", peers: id)
             }
-            fireNavigationEvent(GameEvent.Navigation.startGame(level: 1, ipadIndex: 0))
+            fireNavigationEvent(GameEvent.Navigation.startGame(level: numberOfplayers, ipadIndex: 0))
         }
     }
     

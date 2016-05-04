@@ -59,8 +59,10 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         presentScene(gameScene)
     }
     
-    func goToGameScene(ipadNr: Int){
+    func goToGameScene(numberOfPlayers: Int, ipadNr: Int){
         gameScene.ipadNr = ipadNr
+        gameScene.numberOfPlayers = numberOfPlayers
+        debugPrint("going to game scene with \(numberOfPlayers) players")
         presentScene(gameScene)
     }
     
@@ -82,8 +84,8 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     func onNavigationEvent(event: GameEvent.Navigation) {
         debugPrint("received navigation event: \(GameEvent.Navigation.toString(event))")
         switch event {
-        case let .startGame(_, ipadIndex):
-            goToGameScene(ipadIndex)
+        case let .startGame(numberOfPlayers, ipadIndex):
+            goToGameScene(numberOfPlayers, ipadNr: ipadIndex)
             break
         case .endGame:
             goToMenuScene()

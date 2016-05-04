@@ -17,11 +17,40 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     var buttons = [Button]()
     var portals = [Portal]()
     var movingCharacter: Character?
+    var winConditions = [Bool]() {
+        didSet {
+            debugPrint(winConditions)
+            var endGame = true
+            for index in 0...winConditions.count - 1 {
+                let value = winConditions[index]
+                debugPrint("ipadNr \(index) is \(value),  winConditions length = \(winConditions.count)")
+                if !value {
+                    endGame = false
+                    break
+                }
+            }
+            if endGame {
+                fireGameEvent(GameEvent.gameOver)
+            }
+        }
+    }
     
     //other
     var cm : ConnectivityManager?
     var gvc : GameViewController?
     var ipadNr : Int = 0
+    
+    var numberOfPlayers : Int = 1 {
+        didSet {
+            debugPrint("**********************************")
+            debugPrint("new value for numbers of players \(numberOfPlayers)")
+            winConditions = [Bool](count: numberOfPlayers, repeatedValue: false)
+            debugPrint(winConditions)
+            debugPrint("winConditions has count \(winConditions.count)")
+                        debugPrint("**********************************")
+        }
+    }
+    
     var gameEventListeners = [InGameEventListener]()
     
     //animations
@@ -31,7 +60,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     let scaleDown : SKAction = SKAction.scaleBy(1/1.2, duration: 0.2)
     
     override func didMoveToView(view: SKView) {
-        debugPrint("did move to game scene view")
         //add timing functions to scale animations
         fadeIn.timingFunction = {sin($0*Float(M_PI_2))}
         fadeOut.timingFunction = { sin($0*Float(M_PI_2))}
@@ -70,8 +98,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     
     func initGameScene(){
         //switch on ipadNr
-        debugPrint("ipadNr: \(ipadNr)") 
-                       
+        debugPrint("ipadNr: \(ipadNr)")
         /************
         ADD ALL NODES
         *************/
@@ -90,6 +117,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             self.scene!.addChild(b.node)
             //add self as button listener
             b.listeners.append(self)
+            //b.state =  ButtonState.NOT_PRESSED
         }
         for c in characters {
             c.node.position = self.convertPointToView(c.position)
@@ -108,7 +136,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         let B = contact.bodyB.node!
         
         if let name = A.name { //get name of node A, if any
-            debugPrint("A's name: \(name)")
             //is A a player?
             if let character = getCharacterByName(name) {
                 solvePlayerContactBegan(character, characterNode: A, otherNode: B)
@@ -124,7 +151,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     func solvePlayerContactBegan(character: Character, characterNode: SKNode, otherNode: SKNode){
-        debugPrint("solving player contact began")
         //get name of other node, if any
         if let name = otherNode.name {
             //is other node a button
@@ -133,18 +159,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                     button.state = (character.color === button.color) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
                 }
                 button.visitors = button.visitors + 1
-                if button.state == ButtonState.PRESSED_RIGHT_COLOR && isGameOver() {
-                    gameOver()
-                }
-                /*
-                if button.visitors == 1 {
-                    for listener in button.listeners {
-                        listener.onButtonStateChange(button.state)
-                    }
-                }*/
-                debugPrint("solved contact between \(character.name) and \(button.name)")
             } else if let portal = getPortalByName(name) where portal.isActive {
-                debugPrint("touching portal")
                 if let colorStr : ColorString = ColorManager.getColorString(character.color)! {
                     fireGameEvent(.sendCharacter(characterColor: colorStr, portalColor: ColorManager.getColorString(portal.color)!))
                                             self.removeCharacter(character)
@@ -171,12 +186,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     func didEndContact(contact: SKPhysicsContact) {
-        debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) ended")
         let A = contact.bodyA.node!
         let B = contact.bodyB.node!
         
         if let name = A.name { //get name of node A, if any
-            debugPrint("A's name: \(name)")
             //is A a player?
             if let character = getCharacterByName(name) {
                 solvePlayerContactEnded(character, otherNode: B)
@@ -191,7 +204,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     func solvePlayerContactEnded(character: Character, otherNode: SKNode){
-        debugPrint("solving player contact ended")
         //get name of other node, if any
         if let name = otherNode.name {
             //is other node a button
@@ -207,16 +219,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 else if character.color == button.color{
                     button.state = .PRESSED_WRONG_COLOR
                 }
-                debugPrint("solved contact between \(character.name) and \(button.name)")
             } else if let portal = getPortalByName(name){
                 portal.isActive = true //activate portal when character leaves portal
             }
         }
-    }
-    
-    func gameOver(){
-        //override in subclasses
-        gvc?.goToMenuScene()
     }
     
     //resets level
@@ -230,13 +236,16 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     //checks if win condition i met
-    func isGameOver() -> Bool{
+    func isWinning(){
+        var winning = true
         for button in buttons {
             if(button.state != ButtonState.PRESSED_RIGHT_COLOR){
-                return false
+                winning = false
+                break
             }
         }
-        return true
+        winConditions[ipadNr] = winning
+        fireGameEvent(.winning(winning: winning, ipadNr: ipadNr))
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -247,18 +256,14 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         for touch in touches {
             //get touch location and touched node
             let location = touch.locationInNode(self)
-
-            
             let touchedNode = scene!.nodeAtPoint(location)
             
             //get name of touched node, if any
             if let name = touchedNode.name {
-                debugPrint(name )
                 //move a player?
                 if let character = getCharacterByName(name) {
                     movingCharacter = character
                     touchedNode.runAction(scaleUp) //
-                    debugPrint("\(name) is moving")
                 } else {
                     debugPrint("No character with that name....")
                 }
@@ -277,7 +282,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 //touched a obstacle?
                 if let _ = getObstacleByName(name) {
                     movingCharacter = nil
-                    debugPrint("OPS")
                 }
             }
 
@@ -297,7 +301,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        debugPrint("\(movingCharacter?.name) stopped moving")
         if movingCharacter != nil  {
             if let node = self.childNodeWithName(movingCharacter!.name){
                 node.runAction(scaleDown)
@@ -402,6 +405,11 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         case let .closeDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = true
+        case let .winning(winning: winning, ipadNr: ipadNr):
+            debugPrint("snopp snopparna")
+                winConditions[ipadNr] = winning
+                break
+        default: break
         }
     }
     
@@ -419,6 +427,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         case let .closeDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = true
+        default: break
         }
     }
     
@@ -462,6 +471,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         fireGameEvent(GameEvent.openDoor(doorColor: ColorManager.getColorString(button.color)!))
             break
         }
+        isWinning()
     }
     
     //Connection listener
