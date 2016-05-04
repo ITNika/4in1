@@ -28,6 +28,8 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     var navigationEventListeners = [NavigationEventListener]()
     var networkGameEventListeners = [NetworkGameEventListener]()
     
+    
+    
     //init, sätter upp allt för Multi Peer Connectivity Framework
     override init(){
         session = MCSession(peer: self.peerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.Required)

@@ -10,14 +10,14 @@ import Foundation
 
 enum GameEvent {
 
-        case sendCharacter(characterColor: ColorString, portalName: String)
+        case sendCharacter(characterColor: ColorString, portalColor: ColorString)
         case openDoor(doorColor: ColorString)
         case closeDoor(doorColor: ColorString)
         
         static func toString(event: GameEvent) -> String {
             switch event {
             case let .sendCharacter(characterColor, portalName):
-                return "sendCharacter \(characterColor.rawValue) \(portalName)"
+                return "sendCharacter \(characterColor.rawValue) \(portalName.rawValue)"
             case let .openDoor(doorColor):
                 return "openDoor \(doorColor.rawValue)"
             case let .closeDoor(doorColor):
@@ -43,14 +43,15 @@ enum GameEvent {
             if split.count == 3 { // test for sendCharacter
                 if split[0] == "sendCharacter" {
                     if let color1 = ColorString(rawValue: split[1]) {
-                        return .sendCharacter(characterColor: color1, portalName: split[2])
+                        if let color2 = ColorString(rawValue: split[2]){
+                            return .sendCharacter(characterColor: color1, portalColor: color2)
+                        }
                     }
                 }
             }
             return nil
         }
 
-    
     enum Navigation {
         case startGame(level: Int, ipadIndex: Int)
         case endGame

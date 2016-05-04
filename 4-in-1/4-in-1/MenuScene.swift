@@ -63,13 +63,12 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         self.tutorialLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame) - newGameLabel!.frame.height - joinGameLabel!.frame.height - 40)
         self.settingsLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y:CGRectGetMidY(self.scene!.frame) - newGameLabel!.frame.height - joinGameLabel!.frame.height - tutorialLabel!.frame.height - 60)
         
-        self.addChild(self.titleLabel!)     //Lägger till noderna på skärmen
+        self.addChild(self.titleLabel!)  //Lägger till noderna på skärmen
         self.addChild(self.newGameLabel!)
         self.addChild(self.joinGameLabel!)
         self.addChild(self.tutorialLabel!)
         self.addChild(self.settingsLabel!)
         
-
         /*************
          particles
         **************/

@@ -11,6 +11,7 @@ import MultipeerConnectivity
 
 class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, InGameEventListener, NetworkGameEventListener, ButtonListener {
     //entities
+    var walls = [Wall]()
     var characters = [Character]()
     var obstacles = [Obstacle]()
     var buttons = [Button]()
@@ -43,79 +44,43 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         // set self to contact delegate
         self.physicsWorld.contactDelegate = self
         //init scene
+        scene!.scaleMode = .AspectFill
         self.reset() // removes all entities and their nodes
+        //walls
+        setUpWalls()
         self.initGameScene()
     }
     
-    func initGameScene(){
-        //switch on ipadNr
-        debugPrint("ipadNr: \(ipadNr)")
-        if ipadNr % 2 == 0 {
-            self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.salmon]!
-        } else {
-            self.view?.scene?.backgroundColor = ColorManager.colors[ColorString.yellow]!
-        }
-        scene!.scaleMode = .AspectFill
-        
+    func setUpWalls(){
         /********************************
          WALLS
          ********************************/
         let screenWidth: CGFloat = scene!.size.width
         let screenHeight: CGFloat = scene!.size.height
-        var walls = [Wall]()
         walls.append(Wall(x: 0, y: screenHeight/2 , width: 1, height: screenHeight))
         walls.append(Wall(x: screenWidth/2, y: 0 , width: screenWidth, height: 1))
         walls.append(Wall(x: screenWidth, y: screenHeight/2 , width: 1, height: screenHeight))
         walls.append(Wall(x: screenWidth/2, y: screenHeight , width: screenWidth, height: 1))
-
-        /********************************
-         OBSTACLES
-         ********************************/
-        let obstacle = Obstacle(x: screenWidth/2, y: screenHeight/2 , color: ColorManager.colors[ColorString.blue]!, width: 75, height: screenHeight)
-        obstacles.append(obstacle)
-        
-  
-        /********************************
-         BUTTONS
-         ********************************/
-        
-        // create blue and red button
-        let blueButton = Button(x: 300, y: 100, color: ColorManager.colors[ColorString.blue]!)
-        let redButton = Button(x: 800, y: 600, color: ColorManager.colors[ColorString.red]!)
-        
-        //add blue and red button to buttons
-        buttons.append(blueButton)
-        buttons.append(redButton)
-        
-    
-        
-
-        /********************************
-         PORTALS
-         ********************************/
-        let bluePortal = Portal(x: 250, y: 250, color: ColorManager.colors[ColorString.blue]!)
-        portals.append(bluePortal)
-        
-        /********************************
-         PLAYERS
-         ********************************/
-        
-        // create players
-        let bluePlayer = Character(x: 100, y: 100, color: ColorManager.colors[ColorString.blue]!)
-        let redPlayer = Character(x: 400, y: 700, color: ColorManager.colors[ColorString.red]!)
-        
-        // add to players....
-        characters.append(bluePlayer)
-        characters.append(redPlayer)
-        
-        /************
-        ADD ALL NODES
-        *************/
         
         for wall in walls {
             wall.node.position = self.convertPointToView(wall.position)
             self.scene!.addChild(wall.node)
         }
+    }
+    
+    func initGameScene(){
+        //switch on ipadNr
+        debugPrint("ipadNr: \(ipadNr)") 
+                       
+        /************
+        ADD ALL NODES
+        *************/
+        let entities = LevelFactory.getEntities(2, ipadIndex: ipadNr, scene: self)
+        obstacles = (entities?.obstacles)!
+        buttons = (entities?.buttons)!
+        characters = (entities?.characters)!
+        portals = (entities?.portals)!
+        
         for o in obstacles {
             o.node.position = self.convertPointToView(o.position)
             self.scene!.addChild(o.node)
@@ -135,7 +100,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             p.node.position = self.convertPointToView(p.position)
             self.scene!.addChild(p.node)
         }
-        
     }
  
     func didBeginContact(contact: SKPhysicsContact) {
@@ -179,10 +143,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                     }
                 }*/
                 debugPrint("solved contact between \(character.name) and \(button.name)")
-            } else if getPortalByName(name) != nil {
+            } else if let portal = getPortalByName(name) where portal.isActive {
                 debugPrint("touching portal")
                 if let colorStr : ColorString = ColorManager.getColorString(character.color)! {
-                    fireGameEvent(.sendCharacter(characterColor: colorStr, portalName: "A"))
+                    fireGameEvent(.sendCharacter(characterColor: colorStr, portalColor: ColorManager.getColorString(portal.color)!))
                     characterNode.runAction(fadeOut, completion: {
                         self.removeCharacter(character)
                         characterNode.removeFromParent()
@@ -243,6 +207,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                     button.state = .PRESSED_WRONG_COLOR
                 }
                 debugPrint("solved contact between \(character.name) and \(button.name)")
+            } else if let portal = getPortalByName(name){
+                portal.isActive = true //activate portal when character leaves portal
             }
         }
     }
@@ -389,7 +355,23 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         // create character
         let newCharacter = Character(x: 300, y: 600, color: color)
         // create node
-        //let node = createShapeNodeFromModel(newCharacter)!
+        newCharacter.node.alpha = 0
+        newCharacter.node.position = self.convertPointToView(newCharacter.position)
+        // add to characters....
+        characters.append(newCharacter)
+        // add node to scene
+        scene!.addChild(newCharacter.node)
+        newCharacter.node.runAction(fadeIn)
+    }
+    
+    func spawnCharacterOnPortal(characterColor: UIColor, portal: Portal){
+        //deactivate portal
+        portal.isActive = false
+        // get position from portal
+        let portalPos = portal.position
+        // create character
+        let newCharacter = Character(x: portalPos.x, y: portalPos.y, color: characterColor)
+        // create node
         newCharacter.node.alpha = 0
         newCharacter.node.position = self.convertPointToView(newCharacter.position)
         // add to characters....
@@ -403,8 +385,14 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     func onGameEventOverNetwork(event: GameEvent) {
         debugPrint("recieved game event over network: \(GameEvent.toString(event))")
         switch event {
-        case let .sendCharacter(characterColor, _):
-            spawnCharacter(ColorManager.colors[characterColor]!)
+        case let .sendCharacter(characterColorStr, portalColorStr):
+            let portalColor = ColorManager.colors[portalColorStr]!
+            let characterColor = ColorManager.colors[characterColorStr]!
+            let portal = findPortalByColor(portalColor)
+            if portal != nil {
+                spawnCharacterOnPortal(characterColor, portal: portal!)
+            }
+            //spawnCharacter(ColorManager.colors[characterColor]!)
             break
         case let .openDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
@@ -420,6 +408,9 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         //handle more events later
         debugPrint("recieved in game event: \(GameEvent.toString(event))")
         switch event {
+        case .sendCharacter(_, _):
+            //do nothing, dont want to spawn to characters of same color :P
+            break
         case let .openDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = false
@@ -427,8 +418,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         case let .closeDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = true
-        default:
-            break
         }
     }
     
@@ -436,6 +425,15 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         for o in obstacles {
             if o.color == color {
                 return o
+            }
+        }
+        return nil
+    }
+    
+    func findPortalByColor(color: UIColor) -> Portal? {
+        for p in portals {
+            if p.color == color {
+                return p
             }
         }
         return nil
@@ -463,7 +461,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         fireGameEvent(GameEvent.openDoor(doorColor: ColorManager.getColorString(button.color)!))
             break
         }
-
     }
     
     //Connection listener

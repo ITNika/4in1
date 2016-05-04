@@ -17,6 +17,7 @@ class Portal: ColoredEntity {
     var node: SKShapeNode = SKShapeNode()
     var position: CGPoint
     let color: UIColor
+    var isActive : Bool = true
     
     init(x: CGFloat, y: CGFloat, color: UIColor) {
         self.position = CGPointMake(x, y)
