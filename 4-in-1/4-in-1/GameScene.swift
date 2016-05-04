@@ -38,7 +38,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         scaleUp.timingFunction = {sin($0*Float(M_PI_2))}
         scaleDown.timingFunction = {sin($0*Float(M_PI_2))}
         //stop advertising
-        //cm?.stopHosting()
+        cm?.stopHosting()
         //remove gravity
         self.physicsWorld.gravity = CGVectorMake(0,0)
         // set self to contact delegate
@@ -147,8 +147,9 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 debugPrint("touching portal")
                 if let colorStr : ColorString = ColorManager.getColorString(character.color)! {
                     fireGameEvent(.sendCharacter(characterColor: colorStr, portalColor: ColorManager.getColorString(portal.color)!))
+                                            self.removeCharacter(character)
                     characterNode.runAction(fadeOut, completion: {
-                        self.removeCharacter(character)
+
                         characterNode.removeFromParent()
                     })
                 } else {
