@@ -28,7 +28,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         cm?.startHosting()
         
         self.titleLabel = SKLabelNode(fontNamed: "ChalkboardSE-bold")     //Sätter typsnitt på texten
-        self.newGameLabel = SKLabelNode(fontNamed: "ChalkdboardSE-Regular")
+        self.newGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         self.joinGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         self.tutorialLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         self.settingsLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
