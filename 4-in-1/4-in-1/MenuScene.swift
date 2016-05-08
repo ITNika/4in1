@@ -47,6 +47,8 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         
         self.titleLabel!.text = "Fyra-i-ett Spel"      //Sätter namn på de olika noderna som syns på skärmen
         self.newGameLabel!.text = "Skapa nytt spel"
+        // Kan man verkligen gå med i ett spel? Är det inte så att man endast kan bli
+        // inbjuden av den som startar sessionen?
         self.joinGameLabel!.text = "Gå med i ett spel"
         self.tutorialLabel!.text = "Öva själv"
         self.settingsLabel!.text = "Inställningar"
