@@ -15,6 +15,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     var menuScene : MenuScene!
     var gameScene : GameScene!
     var tutorialScene: TutorialScene!
+    var levelSelectScene : LevelSelectScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,12 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         tutorialScene.gvc = self
         tutorialScene.addGameEventListener(tutorialScene)
         goToMenuScene()
+        
+        //set up level select scene
+        levelSelectScene = LevelSelectScene(size: view.bounds.size)
+        levelSelectScene.gvc = self
+        levelSelectScene.cm = cm
+        cm.addConnectionListener(levelSelectScene)
     }
 
     override func prefersStatusBarHidden() -> Bool {
@@ -66,8 +73,15 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         presentScene(gameScene)
     }
     
+    func goToLevelSelecScene(numberOfPlayers: Int, ipadNr:Int) {
+        levelSelectScene.numberOfPlayers = numberOfPlayers
+        levelSelectScene.ipadNr = ipadNr
+        debugPrint("going to level select scene")
+        presentScene(levelSelectScene)
+    }
+    
     func goToTutorial(){
-        presentScene(tutorialScene)
+        goToLevelSelecScene(2, ipadNr: 1)
     }
     
     func presentScene(scene: SKScene){
@@ -90,6 +104,8 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         case .endGame:
             goToMenuScene()
             break
+        case let .selectLevel(numberOfPlayers, ipadIndex):
+            goToLevelSelecScene(numberOfPlayers, ipadNr: ipadIndex)
         }
     }
     

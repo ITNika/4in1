@@ -15,5 +15,6 @@ enum ColorString : String { //no spaces allowed, eg. use lightBlue instead of li
     case teal = "teal"
     case yellow = "yellow"
     case salmon = "salmon"
+    case lightTeal = "lightTeal"
     //...
 }

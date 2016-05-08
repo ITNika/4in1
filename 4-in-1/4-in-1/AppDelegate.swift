@@ -17,10 +17,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //if no data in the CoreData, add the level data. dummy data for now.
+        var bool: Bool = false
+        let entity : String = "Level"
+        let request = NSFetchRequest(entityName: entity)
+        var error: NSError? = nil
+        let count = managedObjectContext.countForFetchRequest(request, error: &error)
+        if count == 0{
+            bool = true
+        }
+        
+        if bool{
+            let entityDescription = NSEntityDescription.entityForName("Level", inManagedObjectContext: self.managedObjectContext)
+            let level1 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
+            let level2 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
+            let level3 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
+            let level4 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
+            
+            level1.setValue(0, forKey: "levelNumber")
+            level1.setValue(true, forKey: "isPlayable")
+            level1.setValue(1, forKey: "numberOfPlayers")
+            
+            level2.setValue(1, forKey: "levelNumber")
+            level2.setValue(false, forKey: "isPlayable")
+            level2.setValue(1, forKey: "numberOfPlayers")
+            
+            level3.setValue(2, forKey: "levelNumber")
+            level3.setValue(false, forKey: "isPlayable")
+            level3.setValue(1, forKey: "numberOfPlayers")
+            
+            level4.setValue(3, forKey: "levelNumber")
+            level4.setValue(false, forKey: "isPlayable")
+            level4.setValue(1, forKey: "numberOfPlayers")
+            
+            do{
+                try level1.managedObjectContext?.save()
+                try level2.managedObjectContext?.save()
+                try level3.managedObjectContext?.save()
+                try level4.managedObjectContext?.save()
+            } catch{
+                print(error)
+            }
+            
+        }
+        
         return true
     }
-
-    func applicationWillResignActive(application: UIApplication) {
+    
+       func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
@@ -46,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     
     lazy var applicationDocumentsDirectory: NSURL = {
-        // The directory the application uses to store the Core Data store file.
+        // The directory the application uses to store the Core Data store file. This code uses a directory named "duedhuid.ijm" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count-1]
     }()
@@ -58,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        // The persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
+        // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("4-in-1.sqlite")
@@ -74,6 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dict[NSUnderlyingErrorKey] = error as NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             // Replace this with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
             abort()
         }
@@ -104,6 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+
 
 
 }

@@ -182,11 +182,11 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
             let numberOfplayers = session.connectedPeers.count + 1
             for index in 0...self.session.connectedPeers.count-1 {
                 let id: [MCPeerID] = [self.session.connectedPeers[index]]
-                let event = GameEvent.Navigation.startGame(level: numberOfplayers, ipadIndex: index+1)
+                let event = GameEvent.Navigation.selectLevel(numberOfPlayers: numberOfplayers, ipadIndex: index+1)
                 broadcastNavigationEvent(event, peers: id)
                 //sendString("\(index+1)", peers: id)
             }
-            fireNavigationEvent(GameEvent.Navigation.startGame(level: numberOfplayers, ipadIndex: 0))
+            fireNavigationEvent(GameEvent.Navigation.selectLevel(numberOfPlayers: numberOfplayers, ipadIndex: 0))
         }
     }
     
