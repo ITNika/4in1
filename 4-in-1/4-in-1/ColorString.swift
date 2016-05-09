@@ -11,9 +11,14 @@ import Foundation
 enum ColorString : String { //no spaces allowed, eg. use lightBlue instead of light blue
     case blue = "blue"
     case red = "red"
+    case green  = "green"
     case purple = "purple"
     case teal = "teal"
     case yellow = "yellow"
     case salmon = "salmon"
+    case purpleDark = "purpleDark"
+    case tealDark = "tealDark"
+    case yellowDark = "yellowDark"
+    case salmonDark = "salmonDark"
     //...
 }

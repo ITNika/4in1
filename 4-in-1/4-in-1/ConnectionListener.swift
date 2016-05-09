@@ -11,5 +11,5 @@ import MultipeerConnectivity
 
 protocol ConnectionListener {
     //func handleMessage(message : String)
-    func onConnectionStateChange(state : MCSessionState)
+    func onConnectionStateChange(state : MCSessionState, count: Int)
 }

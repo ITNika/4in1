@@ -31,7 +31,7 @@ class LevelFactory {
         let salmonColor = ColorManager.colors[ColorString.salmon]!
         let purpleColor = ColorManager.colors[ColorString.purple]!
         let tealColor = ColorManager.colors[ColorString.teal]!
-        let yellowColor = ColorManager.colors[ColorString.yellow]!
+        let yellowColor = ColorManager.colors[ColorString.yellowDark]!
 
         
         switch ipadIndex {

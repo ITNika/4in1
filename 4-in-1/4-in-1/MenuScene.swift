@@ -26,7 +26,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         debugPrint("moving to menu scene")
         // start hosting?
         cm?.startHosting()
-        
+        /*
         self.titleLabel = SKLabelNode(fontNamed: "ChalkboardSE-bold")     //Sätter typsnitt på texten
         self.newGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         self.joinGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
@@ -82,7 +82,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         particle.particleColorBlendFactor = 1.0;
         particle.particleColor = ColorManager.colors[ColorString.purple]!;
         self.addChild(particle)
-    
+    */
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -94,7 +94,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
             let nodeAtTouch = self.nodeAtPoint(touch.locationInNode(self))
             if nodeAtTouch.name == "title" {
                 print("Title Label Pressed")
-            }else if nodeAtTouch.name == "new" {
+            }else if nodeAtTouch.name == "createGame" {
                 print("New game Label Pressed")
                 cm?.joinSession()
             }else if nodeAtTouch.name == "tutorial"{
@@ -116,14 +116,23 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         // do something?
     }*/
     
-    func onConnectionStateChange(state : MCSessionState){
-        switch(state) {
-        case .NotConnected: self.view?.scene?.backgroundColor = UIColor.redColor()
-            break
-        case .Connecting: self.view?.scene?.backgroundColor = UIColor.blueColor()
-            break
-        case .Connected: self.view?.scene?.backgroundColor = UIColor.greenColor()
-            break
+    func onConnectionStateChange(state : MCSessionState, count: Int){
+        let node = self.childNodeWithName("connectionLabel")
+        if let label = node as! SKLabelNode? where node != nil {
+            switch(state) {
+            case .NotConnected:
+                label.fontColor = ColorManager.colors[ColorString.salmon]
+                label.text  = "Not Connected"
+                break
+            case .Connecting:
+                label.fontColor = ColorManager.colors[ColorString.purple]
+                label.text  = "Connecting"
+                break
+            case .Connected:
+                label.fontColor = ColorManager.colors[ColorString.teal]
+                label.text  = "Connected to \(count) other players"
+                break
+            }
         }
     }
     

@@ -26,13 +26,13 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         cm.gvc = self
         
         //set up menu scene
-        menuScene = MenuScene(size: view.bounds.size)
+        menuScene = MenuScene(fileNamed: "MenuScene.sks")
         menuScene.gvc = self
         menuScene.cm = cm
         cm?.addConnectionListener(menuScene!)
         
         //set up game scene
-        gameScene = GameScene(size: view.bounds.size)
+        gameScene = GameScene(fileNamed: "GameScene.sks")
         gameScene.gvc = self
         gameScene.cm = cm
         cm.addConnectionListener(gameScene)
@@ -93,7 +93,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         }
     }
     
-    func onConnectionStateChange(state : MCSessionState){
+    func onConnectionStateChange(state : MCSessionState, count: Int){
         //todo
     }
 }

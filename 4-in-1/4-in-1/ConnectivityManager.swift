@@ -125,7 +125,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
                    peer peerID: MCPeerID,
                         didChangeState state: MCSessionState){
         for l in listeners {
-            l.onConnectionStateChange(state)
+            l.onConnectionStateChange(state, count: session.connectedPeers.count)
         }
         debugPrint("New State: \(stringValue(state))")
     }
