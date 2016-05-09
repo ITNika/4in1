@@ -73,6 +73,7 @@ enum GameEvent {
         case startGame(level: Int, ipadIndex: Int)
         case endGame
         case selectLevel(numberOfPlayers: Int, ipadIndex: Int)
+        case menue
         
         static func toString(event: GameEvent.Navigation) -> String {
             switch event {
@@ -82,12 +83,18 @@ enum GameEvent {
                 return "endGame"
             case let .selectLevel(numberOfPlayers, ipadIndex):
                 return "selectLevel \(numberOfPlayers) \(ipadIndex)"
+            case .menue:
+                return "menue"
             }
         }
         
         static func fromString(string: String) -> GameEvent.Navigation? {
             if string == "endGame" { // test for end game
                 return .endGame
+            }
+            
+            if string == "menue"{
+                return .menue
             }
             
             let split = string.componentsSeparatedByString(" ")

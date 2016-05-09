@@ -35,19 +35,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let level3 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
             let level4 = NSManagedObject(entity: entityDescription!, insertIntoManagedObjectContext: self.managedObjectContext)
             
-            level1.setValue(0, forKey: "levelNumber")
+            level1.setValue(1, forKey: "levelNumber")
             level1.setValue(true, forKey: "isPlayable")
             level1.setValue(1, forKey: "numberOfPlayers")
             
-            level2.setValue(1, forKey: "levelNumber")
+            level2.setValue(2, forKey: "levelNumber")
             level2.setValue(false, forKey: "isPlayable")
             level2.setValue(1, forKey: "numberOfPlayers")
             
-            level3.setValue(2, forKey: "levelNumber")
+            level3.setValue(3, forKey: "levelNumber")
             level3.setValue(false, forKey: "isPlayable")
             level3.setValue(1, forKey: "numberOfPlayers")
             
-            level4.setValue(3, forKey: "levelNumber")
+            level4.setValue(4, forKey: "levelNumber")
             level4.setValue(false, forKey: "isPlayable")
             level4.setValue(1, forKey: "numberOfPlayers")
             

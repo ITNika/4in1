@@ -81,7 +81,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     }
     
     func goToTutorial(){
-        goToLevelSelecScene(2, ipadNr: 1)
+        goToLevelSelecScene(1, ipadNr: 0)
     }
     
     func presentScene(scene: SKScene){
@@ -106,7 +106,11 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
             break
         case let .selectLevel(numberOfPlayers, ipadIndex):
             goToLevelSelecScene(numberOfPlayers, ipadNr: ipadIndex)
+        case .menue:
+            goToMenuScene()
+            break
         }
+        
     }
     
     func onConnectionStateChange(state : MCSessionState){

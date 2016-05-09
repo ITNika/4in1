@@ -99,7 +99,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
                 cm?.joinSession()
             }else if nodeAtTouch.name == "tutorial"{
                 print("Tutorial Label pressed")
-                gvc?.goToLevelSelecScene(2, ipadNr: 0)
+                gvc?.goToTutorial()
             }else if nodeAtTouch.name == "set"{
                 print("Settings Label pressed")
             }
