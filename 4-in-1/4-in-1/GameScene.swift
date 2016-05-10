@@ -30,7 +30,10 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 }
             }
             if endGame {
-                fireGameEvent(GameEvent.gameOver)
+                //delay(1.0){
+                  self.fireGameEvent(GameEvent.gameOver)
+                //}
+
             }
         }
     }
@@ -55,12 +58,27 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         }
     }
     
+    
+    
+    
     var gameEventListeners = [InGameEventListener]()
     
     //animations
     let fadeIn : SKAction  = SKAction.fadeInWithDuration(1)
     let fadeOut : SKAction  = SKAction.fadeOutWithDuration(1)
-
+    
+    //Stack overflow
+    //http://stackoverflow.com/questions/24034544/dispatch-after-gcd-in-swift/24318861#24318861
+    //Author: matt
+    /*
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }*/
     
     override func willMoveFromView(view: SKView) {
         self.removeAllChildren()

@@ -24,7 +24,8 @@ class LevelSelectScene: SKScene, Scene, ConnectionListener {
     var numberOfPlayers : Int = 1
     
 
-    
+    let fontSmall : CGFloat = 48
+    let fontBig : CGFloat  = 96
     
     override func willMoveFromView(view: SKView) {
         //removeAllChildren()
@@ -77,6 +78,19 @@ class LevelSelectScene: SKScene, Scene, ConnectionListener {
                 }
                 
                 node.name = String(value)
+                
+                //skapa text för cirkel
+                let text = "\(Int(node.name!)! + 1)"
+                let textNode = SKLabelNode(text: text)
+                textNode.fontColor = UIColor.whiteColor()
+                textNode.fontSize = fontSmall
+                textNode.fontName =  "HelveticaNeue-thin"
+                textNode.horizontalAlignmentMode = .Center;
+                textNode.verticalAlignmentMode = .Center
+                //lägg till text/siffra i cirkeln
+                node.addChild(textNode)
+                
+                
                 levelsNodes.append(node)
             }  //sätter position för level noderna
             
@@ -92,8 +106,7 @@ class LevelSelectScene: SKScene, Scene, ConnectionListener {
             }
             //end if masterpeer
             
-            let fontSmall : CGFloat = 48
-            let fontBig : CGFloat  = 96
+    
             
             //Sätter typsnitt på texten
             self.titleLabel = SKLabelNode(fontNamed: "HelveticaNeue-thin")

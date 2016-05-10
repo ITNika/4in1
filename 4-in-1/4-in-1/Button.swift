@@ -21,11 +21,17 @@ class Button: ColoredEntity {
     //added a property to count the number of players on a button
     var visitors: Int
     
+    let rotation = SKAction.rotateByAngle(CGFloat(M_PI_4), duration: 0.5)
+    let rotWrong = SKAction.rotateToAngle(0, duration: 0.2, shortestUnitArc: true)
+    let rotRight = SKAction.rotateToAngle( CGFloat(M_PI_4), duration: 0.2, shortestUnitArc: true)
+    
     var state: ButtonState = .NOT_PRESSED {
         didSet {
             for listener in listeners {
                 listener.onButtonStateChange(self)
             }
+            node.runAction(state == .PRESSED_RIGHT_COLOR ? rotRight : rotWrong)
+            //node.strokeColor = getStrokeColor()
         }
     }
     
@@ -37,11 +43,15 @@ class Button: ColoredEntity {
         self.name = "\(Button.entityName) \(self.id)"
         self.position = CGPointMake(x,y)
         self.visitors = 0
-        
+
         //init node
         let size = CGSizeMake(100,100)
         node = SKShapeNode(rectOfSize: size)
-        node.fillColor = self.color
+        node.fillColor = UIColor.clearColor()
+        node.lineWidth = 10
+        //node.strokeTexture?.filteringMode = SKTextureFilteringMode.Nearest
+        node.strokeColor = self.color
+        node.antialiased = false
         node.userInteractionEnabled = false
         node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
         node.physicsBody!.dynamic = false
@@ -49,6 +59,10 @@ class Button: ColoredEntity {
         node.physicsBody!.contactTestBitMask = CategoryMask.playerCategory
         node.physicsBody!.collisionBitMask = CategoryMask.noCategory
         node.name = "\(self.name)"
+    }
+    
+    func getStrokeColor()->UIColor {
+        return state == .PRESSED_RIGHT_COLOR ? ColorManager.colors[ColorString.tealDark]! : UIColor.clearColor()
     }
     
     func unpress(){

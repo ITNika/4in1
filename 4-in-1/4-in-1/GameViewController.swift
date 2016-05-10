@@ -15,7 +15,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     var menuScene : MenuScene!
     var gameScene : GameScene!
     var tutorialScene: TutorialScene!
-        var levelSelectScene : LevelSelectScene!
+    var levelSelectScene : LevelSelectScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
