@@ -18,7 +18,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     private var serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser?
     // Kontroller till injudings-vyn (som finns inbyggd i iOS)
-    var bvc : MCBrowserViewController!
+    //var bvc : MCBrowserViewController!
     // bool om assistant har startat eller inte
     private var hasStarted : Bool = false
     // GameViewController, används för navigation mellan vyer och för att visa inbjudnings-vyn.
@@ -36,7 +36,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
         self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: peerId, discoveryInfo: nil, serviceType: serviceType)
         self.serviceBrowser = MCNearbyServiceBrowser(peer: peerId, serviceType: serviceType)
         assistant = MCAdvertiserAssistant(serviceType: serviceType, discoveryInfo: nil, session: session)
-        bvc = MCBrowserViewController(serviceType: serviceType, session: session)
+
         super.init()
         session.delegate = self
     }
@@ -230,6 +230,7 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     let maximumNumberOfPeersInFourInOneGame = 4 //kanske ska höjas?
     
     func joinSession() {
+        let bvc = MCBrowserViewController(serviceType: serviceType, session: session)
         bvc.delegate = self
         bvc.maximumNumberOfPeers = maximumNumberOfPeersInFourInOneGame
         gvc?.presentViewController(bvc, animated: true, completion: nil)

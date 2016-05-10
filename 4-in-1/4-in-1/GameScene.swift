@@ -8,6 +8,7 @@
 
 import SpriteKit
 import MultipeerConnectivity
+import UIKit
 
 class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, InGameEventListener, NetworkGameEventListener, ButtonListener {
     //entities
@@ -59,8 +60,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     
-    
-    
     var gameEventListeners = [InGameEventListener]()
     
     //animations
@@ -80,9 +79,22 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             dispatch_get_main_queue(), closure)
     }*/
     
+    func onQuitYes(alert: UIAlertAction!) {
+        fireGameEvent(GameEvent.gameOver)
+    }
+    
+    func showQuitModalView(){
+        let alert = UIAlertController(title: "Är du säker på att du vill avlsuta spelet?", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ja", style: UIAlertActionStyle.Default, handler: onQuitYes))
+        alert.addAction(UIAlertAction(title: "Nej", style: UIAlertActionStyle.Default, handler: nil))
+        self.gvc?.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
     override func willMoveFromView(view: SKView) {
         self.removeAllChildren()
     }
+    
     
     
     override func didMoveToView(view: SKView) {
@@ -123,6 +135,18 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     func initGameScene(){
         // ipadNr
         debugPrint("ipadNr: \(ipadNr)")
+        
+        if ipadNr == 0 { //ipadNr == 0 -> är host -> kan avsluta
+            let quitNode = SKLabelNode(text: "Avsluta")
+            quitNode.horizontalAlignmentMode = .Left
+            quitNode.fontColor = UIColor.blackColor()
+            quitNode.fontSize = 20
+            quitNode.fontName = "HelveticaNeue-Medium"
+            quitNode.position = CGPointMake(25, 25)
+            quitNode.name = "quit"
+            self.addChild(quitNode)
+        }
+        
         /************
         ADD ALL NODES
         *************/
@@ -291,9 +315,12 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             
             //get name of touched node, if any
             if let name = touchedNode.name {
+                debugPrint("touch node with name \(name)")
                 //move a player?
                 if let character = getCharacterByName(name) {
                     movingCharacter = character
+                } else if name == "quit" {
+                    showQuitModalView()
                 } else {
                     debugPrint("No character with that name....")
                 }
