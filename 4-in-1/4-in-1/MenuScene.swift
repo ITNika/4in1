@@ -21,70 +21,13 @@ class MenuScene: SKScene, Scene, ConnectionListener {
     var cm : ConnectivityManager?
     let fontSmall : CGFloat = 28
     let fontBig : CGFloat  = 38
+
     
     override func didMoveToView(view: SKView) {
         debugPrint("moving to menu scene")
         // start hosting?
         cm?.startHosting()
-        /*
-        self.titleLabel = SKLabelNode(fontNamed: "ChalkboardSE-bold")     //Sätter typsnitt på texten
-        self.newGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
-        self.joinGameLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
-        self.tutorialLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
-        self.settingsLabel = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
-        
-        self.titleLabel!.fontSize = fontBig             //Sätter storleken på de texten
-        self.newGameLabel!.fontSize = fontSmall
-        self.joinGameLabel!.fontSize = fontSmall
-        self.tutorialLabel!.fontSize = fontSmall
-        self.settingsLabel!.fontSize = fontSmall
-        
-        self.titleLabel!.fontColor = UIColor.orangeColor()      //Sätter färg på texten
-        self.newGameLabel!.fontColor = UIColor.orangeColor()
-        self.joinGameLabel!.fontColor = UIColor.orangeColor()
-        self.tutorialLabel!.fontColor = UIColor.orangeColor()
-        self.settingsLabel!.fontColor = UIColor.orangeColor()
-        
-        self.titleLabel!.text = "Fyra-i-ett Spel"      //Sätter namn på de olika noderna som syns på skärmen
-        self.newGameLabel!.text = "Skapa nytt spel"
-        // Kan man verkligen gå med i ett spel? Är det inte så att man endast kan bli
-        // inbjuden av den som startar sessionen?
-        self.joinGameLabel!.text = "Gå med i ett spel"
-        self.tutorialLabel!.text = "Öva själv"
-        self.settingsLabel!.text = "Inställningar"
-        
-        self.titleLabel!.name = "title"             //Skapar ett namn för att kalla på noderna. (Används när någon trycker på en knapp)
-        self.newGameLabel!.name = "new"
-        self.joinGameLabel!.name = "join"
-        self.tutorialLabel!.name = "tutorial"
-        self.settingsLabel!.name = "set"
-        
-        self.titleLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y:CGRectGetMidY(self.scene!.frame) + newGameLabel!.frame.height + 100)    //Sätter position för noderna
-        self.newGameLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y:CGRectGetMidY(self.scene!.frame))
-        self.joinGameLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame) - newGameLabel!.frame.height - 20)
-        self.tutorialLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame) - newGameLabel!.frame.height - joinGameLabel!.frame.height - 40)
-        self.settingsLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y:CGRectGetMidY(self.scene!.frame) - newGameLabel!.frame.height - joinGameLabel!.frame.height - tutorialLabel!.frame.height - 60)
-        
-        self.addChild(self.titleLabel!)  //Lägger till noderna på skärmen
-        self.addChild(self.newGameLabel!)
-        self.addChild(self.joinGameLabel!)
-        self.addChild(self.tutorialLabel!)
-        self.addChild(self.settingsLabel!)
-        
-        /*************
-         particles
-        **************/
-        let path = NSBundle.mainBundle().pathForResource("particles", ofType: "sks")
-        let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(path!) as! SKEmitterNode
-        
-        particle.position = self.convertPointToView(CGPointMake(100,100))
-        particle.targetNode = self.scene
-        
-        particle.particleColorSequence = nil;
-        particle.particleColorBlendFactor = 1.0;
-        particle.particleColor = ColorManager.colors[ColorString.purple]!;
-        self.addChild(particle)
-    */
+
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -101,22 +44,13 @@ class MenuScene: SKScene, Scene, ConnectionListener {
                 cm?.joinSession()
             }else if nodeAtTouch.name == "tutorial"{
                 print("Tutorial Label pressed")
-                gvc?.goToTutorial()
+                gvc?.goToLevelSelecScene(1)
             }else if nodeAtTouch.name == "set"{
                 print("Settings Label pressed")
             }
         }
     }
-    
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-    }
-    
-    //Connection Listener
-    /*
-    func handleMessage(message: String){
-        // do something?
-    }*/
+
     
     func onConnectionStateChange(state : MCSessionState, count: Int){
         let node = self.childNodeWithName("connectionLabel")

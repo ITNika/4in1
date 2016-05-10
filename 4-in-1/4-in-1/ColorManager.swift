@@ -24,6 +24,8 @@ class ColorManager {
             ColorString.tealDark : UIColor(red: 0.227, green: 0.329, blue: 0.314, alpha: 1),
             ColorString.yellowDark : UIColor(red: 0.586, green: 0.518, blue: 0.357, alpha: 1),
             ColorString.salmonDark : UIColor(red: 0.522, green: 0.427, blue: 0.361, alpha: 1),
+            ColorString.tealLight : UIColor(red: 0.486, green: 0.592, blue: 0.576, alpha: 1),
+            ColorString.text : UIColor(white: 51/255, alpha: 1)
             //...
             ]
     

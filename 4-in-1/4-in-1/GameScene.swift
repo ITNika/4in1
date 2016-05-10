@@ -34,11 +34,15 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             }
         }
     }
+    var beganContact = 0
+    var endedContact = 0
+    
     
     //other
     var cm : ConnectivityManager?
     var gvc : GameViewController?
     var ipadNr : Int = 0
+    var level : Int = -1
     
     var numberOfPlayers : Int = 1 {
         didSet {
@@ -56,15 +60,17 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     //animations
     let fadeIn : SKAction  = SKAction.fadeInWithDuration(1)
     let fadeOut : SKAction  = SKAction.fadeOutWithDuration(1)
-    let scaleUp : SKAction = SKAction.scaleBy(CGFloat(1.2), duration: 0.2)
-    let scaleDown : SKAction = SKAction.scaleBy(1/1.2, duration: 0.2)
+
+    
+    override func willMoveFromView(view: SKView) {
+        self.removeAllChildren()
+    }
+    
     
     override func didMoveToView(view: SKView) {
         //add timing functions to scale animations
         fadeIn.timingFunction = {sin($0*Float(M_PI_2))}
         fadeOut.timingFunction = { sin($0*Float(M_PI_2))}
-        scaleUp.timingFunction = {sin($0*Float(M_PI_2))}
-        scaleDown.timingFunction = {sin($0*Float(M_PI_2))}
         //stop advertising
         cm?.stopHosting()
         //remove gravity
@@ -97,12 +103,12 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     func initGameScene(){
-        //switch on ipadNr
+        // ipadNr
         debugPrint("ipadNr: \(ipadNr)")
         /************
         ADD ALL NODES
         *************/
-        let entities = LevelFactory.getEntities(2, ipadIndex: ipadNr, scene: self)
+        let entities = LevelFactory.getEntities(level, numberOfPlayers: numberOfPlayers, ipadIndex: ipadNr, scene: self)
         obstacles = (entities?.obstacles)!
         buttons = (entities?.buttons)!
         characters = (entities?.characters)!
@@ -111,6 +117,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         for o in obstacles {
             o.node.position = self.convertPointToView(o.position)
             self.scene!.addChild(o.node)
+            debugPrint("o: \(o.node.zPosition)")
         }
         for b in buttons {
             b.node.position = self.convertPointToView(b.position)
@@ -118,20 +125,27 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             //add self as button listener
             b.listeners.append(self)
             //b.state =  ButtonState.NOT_PRESSED
-        }
-        for c in characters {
-            c.node.position = self.convertPointToView(c.position)
-            self.scene!.addChild(c.node)
-            debugPrint("character: \(c.name)")
+              debugPrint("b: \(b.node.zPosition)")
         }
         for p in portals {
             p.node.position = self.convertPointToView(p.position)
             self.scene!.addChild(p.node)
+              debugPrint("p: \(p.node.zPosition)")
+        }
+        let zPosForCharacters: CGFloat = 5
+        for c in characters {
+            c.node.position = self.convertPointToView(c.position)
+            c.node.zPosition = zPosForCharacters
+            self.scene!.addChild(c.node)
+            debugPrint("character: \(c.name)")
+            debugPrint("c: \(c.node.zPosition)")
         }
     }
  
     func didBeginContact(contact: SKPhysicsContact) {
         debugPrint("contact between \(contact.bodyA.node!.name) and \(contact.bodyB.node!.name) began")
+        beganContact += 1
+        debugPrint("beginContact: \(beganContact), endedContact: \(endedContact)")
         let A = contact.bodyA.node!
         let B = contact.bodyB.node!
         
@@ -155,14 +169,13 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         if let name = otherNode.name {
             //is other node a button
             if let button = getButtonByName(name) {
-                if button.state != .PRESSED_RIGHT_COLOR {
-                    button.state = (character.color === button.color) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
-                }
+                button.state = (character.color == button.color || button.state == .PRESSED_RIGHT_COLOR) ? .PRESSED_RIGHT_COLOR : .PRESSED_WRONG_COLOR
                 button.visitors = button.visitors + 1
+                debugPrint("visitors: \(button.visitors)")
             } else if let portal = getPortalByName(name) where portal.isActive {
                 if let colorStr : ColorString = ColorManager.getColorString(character.color)! {
-                    fireGameEvent(.sendCharacter(characterColor: colorStr, portalColor: ColorManager.getColorString(portal.color)!))
-                                            self.removeCharacter(character)
+                    fireGameEvent(.sendCharacter(characterColor: colorStr, portal: portal.destination))
+                        self.removeCharacter(character)
                     characterNode.runAction(fadeOut, completion: {
 
                         characterNode.removeFromParent()
@@ -186,6 +199,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     }
     
     func didEndContact(contact: SKPhysicsContact) {
+        endedContact += 1
+        debugPrint("beginContact: \(beganContact), endedContact: \(endedContact)")
         let A = contact.bodyA.node!
         let B = contact.bodyB.node!
         
@@ -209,13 +224,11 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             //is other node a button
             if let button = getButtonByName(name) {
                 button.visitors = button.visitors - 1
-                if button.visitors == 0{
+                debugPrint("visitors: \(button.visitors)")
+                if button.visitors <= 0 {
                     button.state = .NOT_PRESSED
-                    for listener in button.listeners {
-                        listener.onButtonStateChange(button)
-                    }
                 }
-                    //Assuming that there is only one player of each color
+                //Assuming that there is only one player of each color
                 else if character.color == button.color{
                     button.state = .PRESSED_WRONG_COLOR
                 }
@@ -263,7 +276,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 //move a player?
                 if let character = getCharacterByName(name) {
                     movingCharacter = character
-                    touchedNode.runAction(scaleUp) //
                 } else {
                     debugPrint("No character with that name....")
                 }
@@ -302,9 +314,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if movingCharacter != nil  {
-            if let node = self.childNodeWithName(movingCharacter!.name){
-                node.runAction(scaleDown)
-            }
             movingCharacter = nil
         }
 
@@ -389,10 +398,9 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     func onGameEventOverNetwork(event: GameEvent) {
         debugPrint("recieved game event over network: \(GameEvent.toString(event))")
         switch event {
-        case let .sendCharacter(characterColorStr, portalColorStr):
-            let portalColor = ColorManager.colors[portalColorStr]!
+        case let .sendCharacter(characterColorStr, portal):
             let characterColor = ColorManager.colors[characterColorStr]!
-            let portal = findPortalByColor(portalColor)
+            let portal = findPortalByDestination(portal)
             if portal != nil {
                 spawnCharacterOnPortal(characterColor, portal: portal!)
             }
@@ -406,7 +414,6 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = true
         case let .winning(winning: winning, ipadNr: ipadNr):
-            debugPrint("snopp snopparna")
                 winConditions[ipadNr] = winning
                 break
         default: break
@@ -427,6 +434,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         case let .closeDoor(color):
             let door = findDoorByColor(ColorManager.colors[color]!)
             door?.isActive = true
+
         default: break
         }
     }
@@ -443,6 +451,14 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     func findPortalByColor(color: UIColor) -> Portal? {
         for p in portals {
             if p.color == color {
+                return p
+            }
+        }
+        return nil
+    }
+    func findPortalByDestination(dest: String) -> Portal? {
+        for p in portals {
+            if p.name == dest {
                 return p
             }
         }

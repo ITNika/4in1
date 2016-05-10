@@ -18,6 +18,8 @@
 		1106742C1C9AC249007CE749 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106742B1C9AC249007CE749 /* Entity.swift */; };
 		1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1106742D1C9AC286007CE749 /* ColoredEntity.swift */; };
 		111674D11CE0BCB90090567D /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 111674D01CE0BCB90090567D /* MenuScene.sks */; };
+		111674D31CE0D24A0090567D /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111674D21CE0D24A0090567D /* LevelSelectScene.swift */; };
+		111674D61CE0D75A0090567D /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 111674D41CE0D75A0090567D /* CoreDataModel.xcdatamodeld */; };
 		11A079671CCF8B0D00B1C7A0 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079661CCF8B0D00B1C7A0 /* Scene.swift */; };
 		11A079691CCF8DA700B1C7A0 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */; };
 		11A0796B1CCF8DF200B1C7A0 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A0796A1CCF8DF200B1C7A0 /* Button.swift */; };
@@ -55,7 +57,9 @@
 		1106742B1C9AC249007CE749 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		1106742D1C9AC286007CE749 /* ColoredEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoredEntity.swift; sourceTree = "<group>"; };
 		111674D01CE0BCB90090567D /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
-		11A079661CCF8B0D00B1C7A0 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		111674D21CE0D24A0090567D /* LevelSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
+		111674D51CE0D75A0090567D /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		11A079661CCF8B0D00B1C7A0 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scene.swift; path = "4-in-1/Scene.swift"; sourceTree = "<group>"; };
 		11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 		11A0796A1CCF8DF200B1C7A0 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		11A0796C1CCF8E1800B1C7A0 /* ButtonState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonState.swift; sourceTree = "<group>"; };
@@ -92,7 +96,9 @@
 		110674041C9ABF52007CE749 = {
 			isa = PBXGroup;
 			children = (
+				111674D41CE0D75A0090567D /* CoreDataModel.xcdatamodeld */,
 				1106740F1C9ABF52007CE749 /* 4-in-1 */,
+				11A079661CCF8B0D00B1C7A0 /* Scene.swift */,
 				1106740E1C9ABF52007CE749 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,13 +118,12 @@
 				110674271C9AC047007CE749 /* View */,
 				110674281C9AC04D007CE749 /* Controller */,
 				11CAE1C41CD7A5F2001F34AB /* Util */,
+				111674D71CE1C7360090567D /* SKScenes */,
 				110674101C9ABF52007CE749 /* AppDelegate.swift */,
-				110674121C9ABF52007CE749 /* GameScene.sks */,
 				110674181C9ABF52007CE749 /* Main.storyboard */,
 				1106741B1C9ABF52007CE749 /* Assets.xcassets */,
 				1106741D1C9ABF52007CE749 /* LaunchScreen.storyboard */,
 				110674201C9ABF52007CE749 /* Info.plist */,
-				111674D01CE0BCB90090567D /* MenuScene.sks */,
 			);
 			path = "4-in-1";
 			sourceTree = "<group>";
@@ -154,16 +159,25 @@
 				E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */,
 				110674141C9ABF52007CE749 /* GameScene.swift */,
 				110674161C9ABF52007CE749 /* GameViewController.swift */,
-				11A079661CCF8B0D00B1C7A0 /* Scene.swift */,
 				11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */,
-				11CAE1B81CCFB989001F34AB /* ConnectivityManager.swift */,
 				11CAE1BE1CD24241001F34AB /* ConnectionListener.swift */,
+				11CAE1B81CCFB989001F34AB /* ConnectivityManager.swift */,
 				11CAE1CF1CD8AC44001F34AB /* InGameEventListener.swift */,
-				11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */,
 				11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */,
+				11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */,
 				11CAE1DD1CD9F2B3001F34AB /* LevelFactory.swift */,
+				111674D21CE0D24A0090567D /* LevelSelectScene.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		111674D71CE1C7360090567D /* SKScenes */ = {
+			isa = PBXGroup;
+			children = (
+				111674D01CE0BCB90090567D /* MenuScene.sks */,
+				110674121C9ABF52007CE749 /* GameScene.sks */,
+			);
+			name = SKScenes;
 			sourceTree = "<group>";
 		};
 		11CAE1C41CD7A5F2001F34AB /* Util */ = {
@@ -262,10 +276,12 @@
 				11CAE1D01CD8AC44001F34AB /* InGameEventListener.swift in Sources */,
 				11A0796D1CCF8E1800B1C7A0 /* ButtonState.swift in Sources */,
 				11A079691CCF8DA700B1C7A0 /* TutorialScene.swift in Sources */,
+				111674D31CE0D24A0090567D /* LevelSelectScene.swift in Sources */,
 				11A0796F1CCF8E5B00B1C7A0 /* ButtonListener.swift in Sources */,
 				E1935A701C9AE951001D9EFC /* Wall.swift in Sources */,
 				110674171C9ABF52007CE749 /* GameViewController.swift in Sources */,
 				11CAE1DE1CD9F2B3001F34AB /* LevelFactory.swift in Sources */,
+				111674D61CE0D75A0090567D /* CoreDataModel.xcdatamodeld in Sources */,
 				11A0796B1CCF8DF200B1C7A0 /* Button.swift in Sources */,
 				11CAE1DA1CD92B51001F34AB /* NetworkGameEventListener.swift in Sources */,
 				11CAE1CC1CD89F56001F34AB /* GameEvent.swift in Sources */,
@@ -430,6 +446,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		111674D41CE0D75A0090567D /* CoreDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				111674D51CE0D75A0090567D /* CoreDataModel.xcdatamodel */,
+			);
+			currentVersion = 111674D51CE0D75A0090567D /* CoreDataModel.xcdatamodel */;
+			path = CoreDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 110674051C9ABF52007CE749 /* Project object */;
 }

@@ -177,8 +177,9 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController){
         debugPrint("bvc did finish...")
         gvc?.dismissViewControllerAnimated(true, completion: nil)
-
-        if session.connectedPeers.count > 0 {
+        let numberOfplayers = session.connectedPeers.count + 1
+        /*
+        if numberOfPlayers > 1 {
             let numberOfplayers = session.connectedPeers.count + 1
             for index in 0...self.session.connectedPeers.count-1 {
                 let id: [MCPeerID] = [self.session.connectedPeers[index]]
@@ -187,7 +188,21 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
                 //sendString("\(index+1)", peers: id)
             }
             fireNavigationEvent(GameEvent.Navigation.startGame(level: numberOfplayers, ipadIndex: 0))
-        }
+        } */
+        fireNavigationEvent(GameEvent.Navigation.selectLevel(numberOfPlayers: numberOfplayers))
+
+    }
+    
+    func startGame(level: Int, numberOfPlayers: Int){
+         if numberOfPlayers > 1 {
+         for index in 0...self.session.connectedPeers.count-1 {
+            let id: [MCPeerID] = [self.session.connectedPeers[index]]
+            let event = GameEvent.Navigation.startGame(level: level, numberOfPlayers: numberOfPlayers, ipadIndex: index+1)
+            broadcastNavigationEvent(event, peers: id)
+            //sendString("\(index+1)", peers: id)
+         }
+         fireNavigationEvent(GameEvent.Navigation.startGame(level: level, numberOfPlayers: numberOfPlayers, ipadIndex: 0))
+         }
     }
     
     func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController){

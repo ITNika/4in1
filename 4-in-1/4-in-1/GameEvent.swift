@@ -10,7 +10,7 @@ import Foundation
 
 enum GameEvent {
 
-        case sendCharacter(characterColor: ColorString, portalColor: ColorString)
+    case sendCharacter(characterColor: ColorString, portal: String)
         case winning(winning: Bool, ipadNr: Int)
         case openDoor(doorColor: ColorString)
         case closeDoor(doorColor: ColorString)
@@ -18,8 +18,8 @@ enum GameEvent {
         
         static func toString(event: GameEvent) -> String {
             switch event {
-            case let .sendCharacter(characterColor, portalName):
-                return "sendCharacter \(characterColor.rawValue) \(portalName.rawValue)"
+            case let .sendCharacter(characterColor, portal):
+                return "sendCharacter \(characterColor.rawValue) \(portal)"
             case let .openDoor(doorColor):
                 return "openDoor \(doorColor.rawValue)"
             case let .closeDoor(doorColor):
@@ -51,9 +51,7 @@ enum GameEvent {
             if split.count == 3 { // test for sendCharacter
                 if split[0] == "sendCharacter" {
                     if let color1 = ColorString(rawValue: split[1]) {
-                        if let color2 = ColorString(rawValue: split[2]){
-                            return .sendCharacter(characterColor: color1, portalColor: color2)
-                        }
+                            return .sendCharacter(characterColor: color1, portal: split[2])
                     }
                 }
             }
@@ -70,15 +68,18 @@ enum GameEvent {
         }
 
     enum Navigation {
-        case startGame(level: Int, ipadIndex: Int)
+        case startGame(level: Int, numberOfPlayers: Int, ipadIndex: Int)
         case endGame
+        case selectLevel(numberOfPlayers: Int)
         
         static func toString(event: GameEvent.Navigation) -> String {
             switch event {
-            case let .startGame(level, ipadIndex):
-                return "startGame \(level) \(ipadIndex)"
+            case let .startGame(level, numberOfPlayers, ipadIndex):
+                return "startGame \(level) \(numberOfPlayers) \(ipadIndex)"
             case .endGame:
                 return "endGame"
+            case let .selectLevel(count):
+                return "selectLevel \(count)"
             }
         }
         
@@ -89,11 +90,21 @@ enum GameEvent {
             
             let split = string.componentsSeparatedByString(" ")
             
-            if split.count == 3 { // test for sendCharacter
+            if split.count == 2 {
+                if split[0] == "selectLevel" {
+                    if let nr = Int(split[1]){
+                        return .selectLevel(numberOfPlayers: nr)
+                    }
+                }
+            }
+            
+            if split.count == 4 { // test for sendCharacter
                 if split[0] == "startGame" { //.. or startGame
                     if let int1 = Int(split[1]) {
                         if let int2 = Int(split[2]) {
-                            return .startGame(level: int1, ipadIndex: int2)
+                            if let int3 = Int(split[3]) {
+                                return .startGame(level: int1, numberOfPlayers: int2, ipadIndex: int3)
+                            }
                         }
                     }
                 }

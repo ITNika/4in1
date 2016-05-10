@@ -18,12 +18,14 @@ class Portal: ColoredEntity {
     var position: CGPoint
     let color: UIColor
     var isActive : Bool = true
+    let destination: String
     
-    init(x: CGFloat, y: CGFloat, color: UIColor) {
+    init(x: CGFloat, y: CGFloat, color: UIColor, name: String, destination: String) {
         self.position = CGPointMake(x, y)
         self.color = color
         self.id = Portal.newId()
-        self.name = "\(Portal.entityName) \(self.id)"
+        self.name = name
+        self.destination = destination
         
         //init node
         node = SKShapeNode()

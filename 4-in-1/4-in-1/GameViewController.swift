@@ -15,6 +15,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     var menuScene : MenuScene!
     var gameScene : GameScene!
     var tutorialScene: TutorialScene!
+        var levelSelectScene : LevelSelectScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +42,19 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         gameScene.addGameEventListener(gameScene)
         
         //set up tutorial scene
-        tutorialScene = TutorialScene(size: view.bounds.size)
+        tutorialScene = TutorialScene(fileNamed: "GameScene.sks")
         tutorialScene.gvc = self
         tutorialScene.addGameEventListener(tutorialScene)
+        tutorialScene.ipadNr = 0
+        tutorialScene.numberOfPlayers = 1
+        
+        //set up level select scene
+        levelSelectScene = LevelSelectScene(size: view.bounds.size)
+        levelSelectScene.gvc = self
+        levelSelectScene.cm = cm
+        cm.addConnectionListener(levelSelectScene)
+        
+        //go to menu screen, todo go to splash screen
         goToMenuScene()
     }
 
@@ -59,7 +70,8 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
         presentScene(gameScene)
     }
     
-    func goToGameScene(numberOfPlayers: Int, ipadNr: Int){
+    func goToGameScene(level: Int, numberOfPlayers: Int, ipadNr: Int){
+        gameScene.level = level
         gameScene.ipadNr = ipadNr
         gameScene.numberOfPlayers = numberOfPlayers
         debugPrint("going to game scene with \(numberOfPlayers) players")
@@ -67,6 +79,11 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     }
     
     func goToTutorial(){
+        presentScene(tutorialScene)
+    }
+    
+    func goToTutorial(level: Int){
+        tutorialScene.level = level
         presentScene(tutorialScene)
     }
     
@@ -80,16 +97,26 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
             skView.presentScene(scene)
     }
     
+    func goToLevelSelecScene(numberOfPlayers: Int) {
+        levelSelectScene.numberOfPlayers = numberOfPlayers
+        debugPrint("going to level select scene")
+        presentScene(levelSelectScene)
+    }
+    
+    
     //GameEventListener
     func onNavigationEvent(event: GameEvent.Navigation) {
         debugPrint("received navigation event: \(GameEvent.Navigation.toString(event))")
         switch event {
-        case let .startGame(numberOfPlayers, ipadIndex):
-            goToGameScene(numberOfPlayers, ipadNr: ipadIndex)
+        case let .startGame(level, numberOfPlayers, ipadIndex):
+            goToGameScene(level, numberOfPlayers: numberOfPlayers, ipadNr: ipadIndex)
             break
         case .endGame:
+            cm?.session.disconnect()
             goToMenuScene()
             break
+        case let .selectLevel(count):
+            goToLevelSelecScene(count)
         }
     }
     
