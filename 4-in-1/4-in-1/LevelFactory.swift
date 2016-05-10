@@ -21,7 +21,7 @@ class LevelFactory {
         case 2:
             return levelWith2Players(level, ipadIndex: ipadIndex, scene: scene)
         case 3:
-            break
+            return nil
         case 4:
             return levelWith4Players(level, ipadIndex: ipadIndex, screenWidth: screenWidth, screenHeight: screenHeight)
         default:
@@ -265,7 +265,7 @@ class LevelFactory {
         }
     }
     
-    static func levelWith4Players(level: Int ipadIndex: Int, screenWidth: CGFloat, screenHeight: CGFloat) -> ([Character], [Button], [Obstacle], [Portal])? {
+    static func levelWith4Players(level: Int, ipadIndex: Int, screenWidth: CGFloat, screenHeight: CGFloat) -> ([Character], [Button], [Obstacle], [Portal])? {
         //set up arrays
         var characters = [Character]()
         var obstacles = [Obstacle]()
@@ -278,26 +278,77 @@ class LevelFactory {
         let tealColor = ColorManager.colors[ColorString.teal]!
         let yellowColor = ColorManager.colors[ColorString.yellowDark]!
         
+        
+        let offset: CGFloat = 150
+        
         switch level {
         case 0:
             switch ipadIndex {
             case 0:
-                
-                
-                
+                //buttons
+                let purpleButton = Button(x: screenWidth - offset, y: screenHeight - offset, color: purpleColor)
+                buttons.append(purpleButton)
+                //character
+                let salmonCharacter = Character(x: screenWidth - offset, y: offset, color: salmonColor)
+                characters.append(salmonCharacter)
+                //obstacle
+                let salmonObstacle = Obstacle(x: screenWidth*0.4, y: screenHeight/2, color: salmonColor,
+                                              width: 75, height: screenHeight)
+                obstacles.append(salmonObstacle)
+                //portals
+                let yellowPortal = Portal(x: offset, y: screenHeight / 2, color: yellowColor, name: "A", destination: "B")
+                portals.append(yellowPortal)
                 break
             case 1:
-                
-                
+                //buttons
+                let yellowButton = Button(x: screenWidth - offset, y: offset, color: yellowColor)
+                buttons.append(yellowButton)
+                //character
+                let tealCharacter = Character(x: screenWidth/2, y: screenHeight/2, color: tealColor)
+                characters.append(tealCharacter)
+                //obstacle
+                let purpleObstacle = Obstacle(x: screenWidth*0.2, y: screenHeight/2, color: purpleColor,
+                                              width: 75, height: screenHeight)
+                obstacles.append(purpleObstacle)
+                //portals
+                let yellowPortal = Portal(x: screenWidth*0.75, y: screenHeight - offset, color: yellowColor, name: "B", destination: "A")
+                let tealPortal = Portal(x: offset, y: screenHeight / 2, color: tealColor, name: "C", destination: "D")
+                portals.append(yellowPortal)
+                portals.append(tealPortal)
                 break
             case 2:
+                //buttons
+                let salmonButton = Button(x: offset, y: screenHeight - offset, color: salmonColor)
+                buttons.append(salmonButton)
+                //character
+                let purpleCharacter = Character(x: screenWidth/2, y: screenHeight/2, color: purpleColor)
+                characters.append(purpleCharacter)
+                //obstacle
+                let tealObstacle = Obstacle(x: screenWidth*0.8, y: screenHeight/2, color: tealColor,
+                                              width: 75, height: screenHeight)
+                obstacles.append(tealObstacle)
+                //portals
+                       let tealPortal = Portal(x: screenWidth*0.25, y: offset, color: tealColor, name: "D", destination: "C")
                 
-                
+                let purplePortal = Portal(x: screenWidth - offset, y: screenHeight/2, color: purpleColor, name: "E", destination: "F")
+
+                portals.append(purplePortal)
+                portals.append(tealPortal)
                 break
             case 3:
-                
-                
-                
+                //buttons
+                let tealButton = Button(x: screenWidth - offset, y: screenHeight - offset, color: tealColor)
+                buttons.append(tealButton)
+                //character
+                let yellowCharacter = Character(x: screenWidth - offset, y: offset, color: yellowColor)
+                characters.append(yellowCharacter)
+                //obstacle
+                let yellowObstacle = Obstacle(x: screenWidth*0.4, y: screenHeight/2, color: yellowColor,
+                                              width: 75, height: screenHeight)
+                obstacles.append(yellowObstacle)
+                //portals
+                let purplePortal = Portal(x: offset, y: screenHeight / 2, color: purpleColor, name: "F", destination: "E")
+                portals.append(purplePortal)
                 break
             default:
                 break
