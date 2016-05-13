@@ -307,11 +307,11 @@ class LevelFactory {
                 let tealCharacter = Character(x: screenWidth/2, y: screenHeight/2, color: tealColor)
                 characters.append(tealCharacter)
                 //obstacle
-                let purpleObstacle = Obstacle(x: screenWidth*0.2, y: screenHeight/2, color: purpleColor,
+                let purpleObstacle = Obstacle(x: screenWidth*0.35, y: screenHeight/2, color: purpleColor,
                                               width: 75, height: screenHeight)
                 obstacles.append(purpleObstacle)
                 //portals
-                let yellowPortal = Portal(x: screenWidth*0.75, y: screenHeight - offset, color: yellowColor, name: "B", destination: "A")
+                let yellowPortal = Portal(x: screenWidth*0.65, y: screenHeight - offset, color: yellowColor, name: "B", destination: "A")
                 let tealPortal = Portal(x: offset, y: screenHeight / 2, color: tealColor, name: "C", destination: "D")
                 portals.append(yellowPortal)
                 portals.append(tealPortal)
@@ -324,7 +324,7 @@ class LevelFactory {
                 let purpleCharacter = Character(x: screenWidth/2, y: screenHeight/2, color: purpleColor)
                 characters.append(purpleCharacter)
                 //obstacle
-                let tealObstacle = Obstacle(x: screenWidth*0.8, y: screenHeight/2, color: tealColor,
+                let tealObstacle = Obstacle(x: screenWidth*0.75, y: screenHeight/2, color: tealColor,
                                               width: 75, height: screenHeight)
                 obstacles.append(tealObstacle)
                 //portals

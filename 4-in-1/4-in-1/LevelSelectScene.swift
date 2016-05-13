@@ -87,6 +87,7 @@ class LevelSelectScene: SKScene, Scene, ConnectionListener {
                 textNode.fontName =  "HelveticaNeue-thin"
                 textNode.horizontalAlignmentMode = .Center;
                 textNode.verticalAlignmentMode = .Center
+                textNode.name = node.name
                 //lägg till text/siffra i cirkeln
                 node.addChild(textNode)
                 
@@ -229,71 +230,8 @@ class LevelSelectScene: SKScene, Scene, ConnectionListener {
                 }
             }
         }
-        
-        /*
-        if let node: SKNode? = self.nodeAtPoint(touch.locationInNode(self)) {
-            if let name: String? = node!.name {
-                if name == "title" {
-                    print("Title Label Pressed")
-                }
-                if name == "back" {
-                    print("Back Label Pressed")
-                    cm?.fireNavigationEvent(GameEvent.Navigation.endGame)
-                } else {
-                    print("level node pressed")
-                    let level : Int = Int(name!)!
-                    if levels[level].playable {
-                        debugPrint("playing level \(level)")
-                        if (numberOfPlayers > 1){
-                            cm?.startGame(level, numberOfPlayers: numberOfPlayers)
-                        } else {
-                            debugPrint("going to tutorial level \(level)")
-                            gvc?.goToTutorial(level)
-                        }
-                    }
-                }
-            }
-        }
-         */
     }
 
-        
-        
-        
-        /*
-        
-        if let nodeAtTouch = self.nodeAtPoint(touch.locationInNode(self) {
-            if nodeAtTouch.name == "title" {
-                    print("Title Label Pressed")
-            }
-        
-            if nodeAtTouch.name == "back"{
-                    print("Back Label Pressed")
-                    cm?.fireNavigationEvent(GameEvent.Navigation.endGame)
-            } else {
-                print("level node pressed")
-                let nodeName : String = nodeAtTouch.name!
-                let level : Int = Int(nodeName)!
-                if levels[level].playable {
-                        debugPrint("playing level \(level)")
-                        if (numberOfPlayers > 1){
-                            cm?.startGame(level, numberOfPlayers: numberOfPlayers)
-                        } else {
-                            debugPrint("going to tutorial level \(level)")
-                            gvc?.goToTutorial(level)
-                        }
-                }
-            }
-        }
-            */
-  
-    
-    
-    //Connection Listener
-    /*
-     func handleMessage(message: String){
-     // do something?
-     }*/
     
     func onConnectionStateChange(state : MCSessionState, count: Int){
         switch(state) {
