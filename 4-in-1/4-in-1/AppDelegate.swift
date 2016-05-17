@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             level21.setValue(2, forKey: "numberOfPlayers")
             
             level22.setValue(1, forKey: "levelNumber")
-            level22.setValue(false, forKey: "isPlayable")
+            level22.setValue(true, forKey: "isPlayable")
             level22.setValue(2, forKey: "numberOfPlayers")
             
             level23.setValue(2, forKey: "levelNumber")
@@ -109,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             level41.setValue(4, forKey: "numberOfPlayers")
             
             level42.setValue(1, forKey: "levelNumber")
-            level42.setValue(false, forKey: "isPlayable")
+            level42.setValue(true, forKey: "isPlayable")
             level42.setValue(4, forKey: "numberOfPlayers")
             
             level43.setValue(2, forKey: "levelNumber")

@@ -19,7 +19,7 @@ class LevelFactory {
         case 1:
             return tutorialLevel(level, screenWidth: screenWidth, screenHeight: screenHeight)
         case 2:
-            return levelWith2Players(level, ipadIndex: ipadIndex, scene: scene)
+            return levelWith2Players(level, ipadIndex: ipadIndex, screenWidth: screenWidth, screenHeight: screenHeight)
         case 3:
             return nil
         case 4:
@@ -40,7 +40,7 @@ class LevelFactory {
         let salmonColor = ColorManager.colors[ColorString.salmon]!
         let purpleColor = ColorManager.colors[ColorString.purple]!
         let tealColor = ColorManager.colors[ColorString.teal]!
-        let yellowColor = ColorManager.colors[ColorString.yellowDark]!
+        let yellowColor = ColorManager.colors[ColorString.yellow]!
         
         let offset: CGFloat = 150
         
@@ -160,7 +160,7 @@ class LevelFactory {
         
     }
     
-    static func levelWith2Players(level: Int, ipadIndex: Int, scene: GameScene) ->([Character], [Button], [Obstacle], [Portal])? {
+    static func levelWith2Players(level: Int, ipadIndex: Int, screenWidth: CGFloat, screenHeight: CGFloat) ->([Character], [Button], [Obstacle], [Portal])? {
         //set up arrays
         var characters = [Character]()
         var obstacles = [Obstacle]()
@@ -171,17 +171,78 @@ class LevelFactory {
         let salmonColor = ColorManager.colors[ColorString.salmon]!
         let purpleColor = ColorManager.colors[ColorString.purple]!
         let tealColor = ColorManager.colors[ColorString.teal]!
-        let yellowColor = ColorManager.colors[ColorString.yellowDark]!
+        let yellowColor = ColorManager.colors[ColorString.yellow]!
+        
+        let offset: CGFloat = 150
         
         switch level {
         case 0:
             switch ipadIndex {
             case 0:
                 /********************************
+                 BUTTONS
+                 ********************************/
+                // create blue and red button
+                let salmonButton = Button(x: offset*2, y: screenHeight/2, color: salmonColor)
+                
+                //add blue and red button to buttons
+                buttons.append(salmonButton)
+                
+                
+                /********************************
+                 PORTALS
+                 ********************************/
+                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                portals.append(yellowPortal)
+                
+                /********************************
+                 PLAYERS
+                 ********************************/
+                
+                // create players
+                let tealPlayer = Character(x: offset, y: screenHeight/2, color: tealColor)
+                
+                // add to players....
+                characters.append(tealPlayer)
+                break
+            case 1:
+                /********************************
+                 BUTTONS
+                 ********************************/
+                // create blue and red button
+                let tealButton = Button(x: screenWidth - offset*2, y: screenHeight/2, color: tealColor)
+                
+                //add blue and red button to buttons
+                buttons.append(tealButton)
+                
+                
+                /********************************
+                 PORTALS
+                 ********************************/
+                let yellowPortal = Portal(x: offset, y: screenHeight/2 , color: yellowColor, name: "B", destination: "A")
+                portals.append(yellowPortal)
+                
+                /********************************
+                 PLAYERS
+                 ********************************/
+                
+                // create players
+                let salmonPlayer = Character(x: screenWidth - offset, y: screenHeight/2, color: salmonColor)
+                
+                // add to players....
+                characters.append(salmonPlayer)
+                break
+            default:
+                return nil
+            }
+            return (characters: characters, buttons: buttons, obstacles: obstacles, portals: portals)
+        case 1:
+            switch ipadIndex {
+            case 0:
+                /********************************
                  OBSTACLES
                  ********************************/
-                let screenWidth: CGFloat = scene.size.width
-                let screenHeight: CGFloat = scene.size.height
+               
                 
                 let purpleObstacle = Obstacle(x: screenWidth*0.6, y: screenHeight/2 , color: purpleColor, width: 75, height: screenHeight)
                 
@@ -192,7 +253,7 @@ class LevelFactory {
                  ********************************/
                 
                 // create blue and red button
-                let salmonButton = Button(x: 150, y: 150, color: salmonColor)
+                let salmonButton = Button(x: offset, y: offset, color: salmonColor)
                 
                 //add blue and red button to buttons
                 buttons.append(salmonButton)
@@ -201,7 +262,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: screenWidth - 150, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -209,7 +270,7 @@ class LevelFactory {
                  ********************************/
                 
                 // create players
-                let tealPlayer = Character(x: 150, y: screenHeight-150, color: tealColor)
+                let tealPlayer = Character(x: offset, y: screenHeight-offset, color: tealColor)
                 
                 // add to players....
                 characters.append(tealPlayer)
@@ -218,8 +279,6 @@ class LevelFactory {
                 /********************************
                  OBSTACLES
                  ********************************/
-                let screenWidth: CGFloat = scene.size.width
-                let screenHeight: CGFloat = scene.size.height
                 
                 let salmonObstacle = Obstacle(x: screenWidth*0.6, y: screenHeight/2 , color: salmonColor, width: 75, height: screenHeight)
                 let tealObstacle = Obstacle(x: (screenWidth*0.6-(75/2))*0.5, y: screenHeight/2 , color: tealColor, width: screenWidth*0.6-(75/2), height: 75)
@@ -231,8 +290,8 @@ class LevelFactory {
                  ********************************/
                 
                 // create blue and red button
-                let purpleButton = Button(x: screenWidth - 150, y: screenHeight - 150, color: purpleColor)
-                let tealButton = Button(x: 150, y: screenHeight - 150, color: tealColor)
+                let purpleButton = Button(x: screenWidth - offset, y: screenHeight - offset, color: purpleColor)
+                let tealButton = Button(x: offset, y: screenHeight - offset, color: tealColor)
                 
                 //add blue and red button to buttons
                 buttons.append(purpleButton)
@@ -241,7 +300,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: screenWidth*0.4, y: 150, color: yellowColor, name: "B", destination: "A")
+                let yellowPortal = Portal(x: screenWidth*0.4, y: offset, color: yellowColor, name: "B", destination: "A")
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -249,8 +308,8 @@ class LevelFactory {
                  ********************************/
                 
                 // create players
-                let salmonPlayer = Character(x: 150, y: 150, color: salmonColor)
-                let purplePlayer = Character(x: screenWidth - 150, y: 150, color: purpleColor)
+                let salmonPlayer = Character(x: offset, y: offset, color: salmonColor)
+                let purplePlayer = Character(x: screenWidth - offset, y: offset, color: purpleColor)
                 
                 // add to players....
                 characters.append(salmonPlayer)
@@ -276,13 +335,67 @@ class LevelFactory {
         let salmonColor = ColorManager.colors[ColorString.salmon]!
         let purpleColor = ColorManager.colors[ColorString.purple]!
         let tealColor = ColorManager.colors[ColorString.teal]!
-        let yellowColor = ColorManager.colors[ColorString.yellowDark]!
+        let yellowColor = ColorManager.colors[ColorString.yellow]!
         
         
         let offset: CGFloat = 150
         
         switch level {
         case 0:
+            switch ipadIndex {
+            case 0:
+                //buttons
+                let salmonButton = Button(x: offset*2, y: screenHeight/2, color: salmonColor)
+                buttons.append(salmonButton)
+                //portals
+                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                portals.append(yellowPortal)
+                //character
+                let tealPlayer = Character(x: offset, y: screenHeight/2, color: tealColor)
+                characters.append(tealPlayer)
+                break
+            case 1:
+                //buttons
+                let yellowButton = Button(x: offset, y: screenHeight-offset, color: yellowColor)
+                buttons.append(yellowButton)
+                //portals
+                let yellowPortal = Portal(x: screenWidth*0.25, y: offset, color: yellowColor, name: "B", destination: "A")
+                portals.append(yellowPortal)
+                let tealPortal = Portal(x: screenWidth-offset, y: screenHeight/2, color: tealColor, name: "C", destination: "D")
+                portals.append(tealPortal)
+                //character
+                let purplePlayer = Character(x: offset*2, y: screenHeight-offset, color: purpleColor)
+                characters.append(purplePlayer)
+                break
+            case 2:
+                //buttons
+                let purpleButton = Button(x: screenWidth - offset*2, y: screenHeight-offset, color: purpleColor)
+                buttons.append(purpleButton)
+                //character
+                let salmonPlayer = Character(x: screenWidth - offset, y: screenHeight-offset, color: salmonColor)
+                characters.append(salmonPlayer)
+                //portals
+                let tealPortal = Portal(x: offset, y: screenHeight/2, color: tealColor, name: "D", destination: "C")
+                portals.append(tealPortal)
+                
+                let purplePortal = Portal(x: screenWidth*0.75, y: offset, color: purpleColor, name: "E", destination: "F")
+                portals.append(purplePortal)
+                break
+            case 3:
+                //buttons
+                let tealButton = Button(x: offset*2, y: screenHeight/2, color: tealColor)
+                buttons.append(tealButton)
+                //character
+                let yellowPlayer = Character(x: offset, y: screenHeight/2, color: yellowColor)
+                characters.append(yellowPlayer)
+                //portals
+                let purplePortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: purpleColor, name: "F", destination: "E")
+                portals.append(purplePortal)
+                break
+            default:
+                break
+            }
+        case 1:
             switch ipadIndex {
             case 0:
                 //buttons
@@ -328,8 +441,7 @@ class LevelFactory {
                                               width: 75, height: screenHeight)
                 obstacles.append(tealObstacle)
                 //portals
-                       let tealPortal = Portal(x: screenWidth*0.25, y: offset, color: tealColor, name: "D", destination: "C")
-                
+                let tealPortal = Portal(x: screenWidth*0.25, y: offset, color: tealColor, name: "D", destination: "C")
                 let purplePortal = Portal(x: screenWidth - offset, y: screenHeight/2, color: purpleColor, name: "E", destination: "F")
 
                 portals.append(purplePortal)
