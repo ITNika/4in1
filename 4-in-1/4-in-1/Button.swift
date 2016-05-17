@@ -22,8 +22,8 @@ class Button: ColoredEntity {
     var visitors: Int
     
     let rotation = SKAction.rotateByAngle(CGFloat(M_PI_4), duration: 0.5)
-    let rotWrong = SKAction.rotateToAngle(0, duration: 0.5, shortestUnitArc: true)
-    let rotRight = SKAction.rotateToAngle( CGFloat(M_PI_4), duration: 0.2, shortestUnitArc: true)
+    let rotWrong = SKAction.rotateToAngle(0, duration: 0.3, shortestUnitArc: true)
+    let rotRight = SKAction.rotateToAngle( CGFloat(M_PI_4), duration: 0.3, shortestUnitArc: true)
     
     
     var state: ButtonState = .NOT_PRESSED {

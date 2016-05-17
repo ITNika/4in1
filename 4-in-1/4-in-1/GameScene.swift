@@ -31,9 +31,9 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 }
             }
             if endGame {
-                //delay(1.0){
+                delay(0.6){
                   self.fireGameEvent(GameEvent.gameOver)
-                //}
+                }
 
             }
         }
@@ -69,7 +69,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     //Stack overflow
     //http://stackoverflow.com/questions/24034544/dispatch-after-gcd-in-swift/24318861#24318861
     //Author: matt
-    /*
+    
     func delay(delay:Double, closure:()->()) {
         dispatch_after(
             dispatch_time(
@@ -77,7 +77,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
                 Int64(delay * Double(NSEC_PER_SEC))
             ),
             dispatch_get_main_queue(), closure)
-    }*/
+    }
     
     func onQuitYes(alert: UIAlertAction!) {
         fireGameEvent(GameEvent.gameOver)

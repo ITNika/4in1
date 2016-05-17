@@ -99,8 +99,8 @@ class LevelFactory {
              ********************************/
             
             // create blue and red button
-            let tealButton = Button(x: 300, y: 100, color: tealColor)
-            let salmonButton = Button(x: 800, y: 600, color: salmonColor)
+            let tealButton = Button(x: screenWidth*0.25, y: offset, color: tealColor)
+            let salmonButton = Button(x: screenWidth*0.75, y: screenHeight-offset, color: salmonColor)
 
             //add blue and red button to buttons
             buttons.append(tealButton)
@@ -111,8 +111,8 @@ class LevelFactory {
              ********************************/
             
             // create players
-            let tealPlayer = Character(x: 100, y: 100, color: tealColor)
-            let salmonPlayer = Character(x: 400, y: 700, color: salmonColor)
+            let tealPlayer = Character(x: screenWidth*0.75, y: offset, color: tealColor)
+            let salmonPlayer = Character(x: screenWidth*0.25, y: screenHeight - offset, color: salmonColor)
             // add to players....
             characters.append(tealPlayer)
             characters.append(salmonPlayer)
