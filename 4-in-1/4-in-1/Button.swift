@@ -28,11 +28,10 @@ class Button: ColoredEntity {
     
     var state: ButtonState = .NOT_PRESSED {
         didSet {
-            node.runAction(state == .PRESSED_RIGHT_COLOR ? rotRight : rotWrong, completion: {
-                for listener in self.listeners {
-                    listener.onButtonStateChange(self)
-                }
-            })
+            for listener in self.listeners {
+                listener.onButtonStateChange(self)
+            }
+            node.runAction(state == .PRESSED_RIGHT_COLOR ? rotRight : rotWrong)
             //node.strokeColor = getStrokeColor()
         }
     }
