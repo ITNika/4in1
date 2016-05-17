@@ -47,7 +47,9 @@ class MenuScene: SKScene, Scene, ConnectionListener {
 
     
     func onConnectionStateChange(state : MCSessionState, count: Int){
+        /*
         let node = self.childNodeWithName("connectionLabel")
+        
         if let label = node as! SKLabelNode? where node != nil {
             switch(state) {
             case .NotConnected:
@@ -63,7 +65,7 @@ class MenuScene: SKScene, Scene, ConnectionListener {
                 label.text  = "Connected to \(count) other players"
                 break
             }
-        }
+        }*/
     }
     
     

@@ -22,15 +22,17 @@ class Button: ColoredEntity {
     var visitors: Int
     
     let rotation = SKAction.rotateByAngle(CGFloat(M_PI_4), duration: 0.5)
-    let rotWrong = SKAction.rotateToAngle(0, duration: 0.2, shortestUnitArc: true)
+    let rotWrong = SKAction.rotateToAngle(0, duration: 0.5, shortestUnitArc: true)
     let rotRight = SKAction.rotateToAngle( CGFloat(M_PI_4), duration: 0.2, shortestUnitArc: true)
+    
     
     var state: ButtonState = .NOT_PRESSED {
         didSet {
-            for listener in listeners {
-                listener.onButtonStateChange(self)
-            }
-            node.runAction(state == .PRESSED_RIGHT_COLOR ? rotRight : rotWrong)
+            node.runAction(state == .PRESSED_RIGHT_COLOR ? rotRight : rotWrong, completion: {
+                for listener in self.listeners {
+                    listener.onButtonStateChange(self)
+                }
+            })
             //node.strokeColor = getStrokeColor()
         }
     }
