@@ -85,8 +85,8 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
     
     func showQuitModalView(){
         let alert = UIAlertController(title: "Är du säker på att du vill avlsuta spelet?", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ja", style: UIAlertActionStyle.Default, handler: onQuitYes))
         alert.addAction(UIAlertAction(title: "Nej", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ja", style: UIAlertActionStyle.Default, handler: onQuitYes))
         self.gvc?.presentViewController(alert, animated: true, completion: nil)
     }
     

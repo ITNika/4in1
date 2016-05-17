@@ -10,12 +10,7 @@ import SpriteKit
 import MultipeerConnectivity
 
 class MenuScene: SKScene, Scene, ConnectionListener {
-    
-    var titleLabel : SKLabelNode?   //Skapar nya noder
-    var newGameLabel : SKLabelNode?
-    var joinGameLabel : SKLabelNode?
-    var settingsLabel : SKLabelNode?
-    var tutorialLabel : SKLabelNode?
+
     var texture: SKTexture?
     var gvc : GameViewController?
     var cm : ConnectivityManager?
@@ -27,7 +22,6 @@ class MenuScene: SKScene, Scene, ConnectionListener {
         debugPrint("moving to menu scene")
         // start hosting?
         cm?.startHosting()
-
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

@@ -44,7 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1106740D1C9ABF52007CE749 /* 4-in-1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "4-in-1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1106740D1C9ABF52007CE749 /* CIRKVA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CIRKVA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		110674101C9ABF52007CE749 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		110674121C9ABF52007CE749 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		110674141C9ABF52007CE749 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -59,6 +59,7 @@
 		111674D01CE0BCB90090567D /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		111674D21CE0D24A0090567D /* LevelSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
 		111674D51CE0D75A0090567D /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		111674DB1CE9FCCA0090567D /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		11A079661CCF8B0D00B1C7A0 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scene.swift; path = "4-in-1/Scene.swift"; sourceTree = "<group>"; };
 		11A079681CCF8DA700B1C7A0 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 		11A0796A1CCF8DF200B1C7A0 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
@@ -106,7 +107,7 @@
 		1106740E1C9ABF52007CE749 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1106740D1C9ABF52007CE749 /* 4-in-1.app */,
+				1106740D1C9ABF52007CE749 /* CIRKVA.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,7 +209,7 @@
 			);
 			name = "4-in-1";
 			productName = "4-in-1";
-			productReference = 1106740D1C9ABF52007CE749 /* 4-in-1.app */;
+			productReference = 1106740D1C9ABF52007CE749 /* CIRKVA.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -267,9 +268,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11CAE1D81CD92552001F34AB /* NavigationEventListener.swift in Sources */,
 				110674151C9ABF52007CE749 /* GameScene.swift in Sources */,
 				1106742C1C9AC249007CE749 /* Entity.swift in Sources */,
-				11CAE1D81CD92552001F34AB /* NavigationEventListener.swift in Sources */,
 				11A079711CCF8E8F00B1C7A0 /* Obstacle.swift in Sources */,
 				11A079671CCF8B0D00B1C7A0 /* Scene.swift in Sources */,
 				11CAE1C11CD2918D001F34AB /* Portal.swift in Sources */,
@@ -312,6 +313,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1106741E1C9ABF52007CE749 /* Base */,
+				111674DB1CE9FCCA0090567D /* sv */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -406,10 +408,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "4-in-1/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "se.chalmers.datx02.2016.12.--in-1";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = se.chalmers.datx02.2016.12.cirkva;
+				PRODUCT_NAME = CIRKVA;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -417,10 +424,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "4-in-1/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "se.chalmers.datx02.2016.12.--in-1";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = se.chalmers.datx02.2016.12.cirkva;
+				PRODUCT_NAME = CIRKVA;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

@@ -11,7 +11,7 @@ import MultipeerConnectivity
 
 class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate, MCSessionDelegate, MCBrowserViewControllerDelegate, InGameEventListener, NavigationEventListener {
     //Multi Peer Connectivity Framework
-    private let serviceType = "4-in-1" //maybe change to "DATX02-12 4-in-1"?
+    private let serviceType = "CIRKVA" //maybe change to "DATX02-12 4-in-1"?
     private let peerId = MCPeerID(displayName: UIDevice.currentDevice().name)
     var session : MCSession!
     private var assistant : MCAdvertiserAssistant!
@@ -227,12 +227,14 @@ class ConnectivityManager: NSObject, MCNearbyServiceAdvertiserDelegate, MCNearby
     }
     
     // visar inbjudnings-vyn
-    let maximumNumberOfPeersInFourInOneGame = 4 //kanske ska höjas?
+    let minimumNumberOfPeersInCirkva = 2
+    let maximumNumberOfPeersInCirkva = 4
     
     func joinSession() {
         let bvc = MCBrowserViewController(serviceType: serviceType, session: session)
         bvc.delegate = self
-        bvc.maximumNumberOfPeers = maximumNumberOfPeersInFourInOneGame
+        bvc.minimumNumberOfPeers = minimumNumberOfPeersInCirkva
+        bvc.maximumNumberOfPeers = maximumNumberOfPeersInCirkva
         gvc?.presentViewController(bvc, animated: true, completion: nil)
     }
     

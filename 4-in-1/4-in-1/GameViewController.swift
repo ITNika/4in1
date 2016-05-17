@@ -16,6 +16,7 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     var gameScene : GameScene!
     var tutorialScene: TutorialScene!
     var levelSelectScene : LevelSelectScene!
+    var debug = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,11 +91,13 @@ class GameViewController: UIViewController, ConnectionListener, NavigationEventL
     func presentScene(scene: SKScene){
         debugPrint("presenting scene")
         let skView = view as! SKView
+        if debug {
             skView.showsFPS = true
             skView.showsNodeCount = true
-            skView.ignoresSiblingOrder = true
-            scene.scaleMode = .ResizeFill
-            skView.presentScene(scene)
+        }
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .ResizeFill
+        skView.presentScene(scene)
     }
     
     func goToLevelSelecScene(numberOfPlayers: Int) {
