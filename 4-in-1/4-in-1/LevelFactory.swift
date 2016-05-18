@@ -146,8 +146,8 @@ class LevelFactory {
             /********************************
              PORTALS
              ********************************/
-            let portal1 = Portal(x: offset, y: offset, color: purpleColor, name: "A", destination: "B")
-            let portal2 = Portal(x: screenWidth - offset, y: offset, color: purpleColor, name: "B", destination: "A")
+            let portal1 = Portal(x: offset, y: offset, color: purpleColor, name: "A", destination: "B", rotation: Rotation.NORTH)
+            let portal2 = Portal(x: screenWidth - offset, y: offset, color: purpleColor, name: "B", destination: "A", rotation: Rotation.NORTH)
             
             portals.append(portal1)
             portals.append(portal2)
@@ -174,6 +174,7 @@ class LevelFactory {
         let yellowColor = ColorManager.colors[ColorString.yellow]!
         
         let offset: CGFloat = 150
+        let portalOffset: CGFloat = 50
         
         switch level {
         case 0:
@@ -192,7 +193,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                let yellowPortal = Portal(x: screenWidth - portalOffset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B", rotation: Rotation.EAST)
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -219,7 +220,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: offset, y: screenHeight/2 , color: yellowColor, name: "B", destination: "A")
+                let yellowPortal = Portal(x: portalOffset, y: screenHeight/2 , color: yellowColor, name: "B", destination: "A", rotation: Rotation.WEST)
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -262,7 +263,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                let yellowPortal = Portal(x: screenWidth - portalOffset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B", rotation: Rotation.EAST)
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -300,7 +301,7 @@ class LevelFactory {
                 /********************************
                  PORTALS
                  ********************************/
-                let yellowPortal = Portal(x: screenWidth*0.4, y: offset, color: yellowColor, name: "B", destination: "A")
+                let yellowPortal = Portal(x: screenWidth*0.375, y: portalOffset, color: yellowColor, name: "B", destination: "A", rotation: Rotation.NORTH)
                 portals.append(yellowPortal)
                 
                 /********************************
@@ -339,6 +340,7 @@ class LevelFactory {
         
         
         let offset: CGFloat = 150
+        let portalOffset: CGFloat = 50
         
         switch level {
         case 0:
@@ -348,7 +350,7 @@ class LevelFactory {
                 let salmonButton = Button(x: offset*2, y: screenHeight/2, color: salmonColor)
                 buttons.append(salmonButton)
                 //portals
-                let yellowPortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B")
+                let yellowPortal = Portal(x: screenWidth - portalOffset, y: screenHeight/2 , color: yellowColor, name: "A", destination: "B", rotation: Rotation.EAST)
                 portals.append(yellowPortal)
                 //character
                 let tealPlayer = Character(x: offset, y: screenHeight/2, color: tealColor)
@@ -359,9 +361,9 @@ class LevelFactory {
                 let yellowButton = Button(x: offset, y: screenHeight-offset, color: yellowColor)
                 buttons.append(yellowButton)
                 //portals
-                let yellowPortal = Portal(x: screenWidth*0.25, y: offset, color: yellowColor, name: "B", destination: "A")
+                let yellowPortal = Portal(x: screenWidth*0.25, y: portalOffset, color: yellowColor, name: "B", destination: "A", rotation: Rotation.NORTH)
                 portals.append(yellowPortal)
-                let tealPortal = Portal(x: screenWidth-offset, y: screenHeight/2, color: tealColor, name: "C", destination: "D")
+                let tealPortal = Portal(x: screenWidth-portalOffset, y: screenHeight/2, color: tealColor, name: "C", destination: "D", rotation: Rotation.EAST)
                 portals.append(tealPortal)
                 //character
                 let purplePlayer = Character(x: offset*2, y: screenHeight-offset, color: purpleColor)
@@ -375,10 +377,10 @@ class LevelFactory {
                 let salmonPlayer = Character(x: screenWidth - offset, y: screenHeight-offset, color: salmonColor)
                 characters.append(salmonPlayer)
                 //portals
-                let tealPortal = Portal(x: offset, y: screenHeight/2, color: tealColor, name: "D", destination: "C")
+                let tealPortal = Portal(x: portalOffset, y: screenHeight/2, color: tealColor, name: "D", destination: "C", rotation: Rotation.WEST)
                 portals.append(tealPortal)
                 
-                let purplePortal = Portal(x: screenWidth*0.75, y: offset, color: purpleColor, name: "E", destination: "F")
+                let purplePortal = Portal(x: screenWidth*0.75, y: portalOffset, color: purpleColor, name: "E", destination: "F", rotation: Rotation.NORTH)
                 portals.append(purplePortal)
                 break
             case 3:
@@ -389,7 +391,7 @@ class LevelFactory {
                 let yellowPlayer = Character(x: offset, y: screenHeight/2, color: yellowColor)
                 characters.append(yellowPlayer)
                 //portals
-                let purplePortal = Portal(x: screenWidth - offset, y: screenHeight/2 , color: purpleColor, name: "F", destination: "E")
+                let purplePortal = Portal(x: screenWidth - portalOffset, y: screenHeight/2 , color: purpleColor, name: "F", destination: "E", rotation: Rotation.EAST)
                 portals.append(purplePortal)
                 break
             default:
@@ -409,7 +411,7 @@ class LevelFactory {
                                               width: 75, height: screenHeight)
                 obstacles.append(salmonObstacle)
                 //portals
-                let yellowPortal = Portal(x: offset, y: screenHeight / 2, color: yellowColor, name: "A", destination: "B")
+                let yellowPortal = Portal(x: portalOffset, y: screenHeight / 2, color: yellowColor, name: "A", destination: "B", rotation: Rotation.WEST)
                 portals.append(yellowPortal)
                 break
             case 1:
@@ -424,8 +426,8 @@ class LevelFactory {
                                               width: 75, height: screenHeight)
                 obstacles.append(purpleObstacle)
                 //portals
-                let yellowPortal = Portal(x: screenWidth*0.65, y: screenHeight - offset, color: yellowColor, name: "B", destination: "A")
-                let tealPortal = Portal(x: offset, y: screenHeight / 2, color: tealColor, name: "C", destination: "D")
+                let yellowPortal = Portal(x: screenWidth*0.625, y: screenHeight - portalOffset, color: yellowColor, name: "B", destination: "A", rotation: Rotation.SOUTH)
+                let tealPortal = Portal(x: portalOffset, y: screenHeight / 2, color: tealColor, name: "C", destination: "D", rotation: Rotation.WEST)
                 portals.append(yellowPortal)
                 portals.append(tealPortal)
                 break
@@ -441,8 +443,8 @@ class LevelFactory {
                                               width: 75, height: screenHeight)
                 obstacles.append(tealObstacle)
                 //portals
-                let tealPortal = Portal(x: screenWidth*0.25, y: offset, color: tealColor, name: "D", destination: "C")
-                let purplePortal = Portal(x: screenWidth - offset, y: screenHeight/2, color: purpleColor, name: "E", destination: "F")
+                let tealPortal = Portal(x: screenWidth*0.375, y: portalOffset, color: tealColor, name: "D", destination: "C", rotation: Rotation.NORTH)
+                let purplePortal = Portal(x: screenWidth - portalOffset, y: screenHeight/2, color: purpleColor, name: "E", destination: "F", rotation: Rotation.EAST)
 
                 portals.append(purplePortal)
                 portals.append(tealPortal)
@@ -459,7 +461,7 @@ class LevelFactory {
                                               width: 75, height: screenHeight)
                 obstacles.append(yellowObstacle)
                 //portals
-                let purplePortal = Portal(x: offset, y: screenHeight / 2, color: purpleColor, name: "F", destination: "E")
+                let purplePortal = Portal(x: portalOffset, y: screenHeight / 2, color: purpleColor, name: "F", destination: "E", rotation: Rotation.WEST)
                 portals.append(purplePortal)
                 break
             default:

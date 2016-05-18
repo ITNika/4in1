@@ -20,21 +20,35 @@ class Portal: ColoredEntity {
     var isActive : Bool = true
     let destination: String
     
-    init(x: CGFloat, y: CGFloat, color: UIColor, name: String, destination: String) {
+    init(x: CGFloat, y: CGFloat, color: UIColor, name: String, destination: String, rotation : Rotation) {
         self.position = CGPointMake(x, y)
         self.color = color
         self.id = Portal.newId()
         self.name = name
         self.destination = destination
         
+
+        
         //init node
         node = SKShapeNode()
-        node.path = UIBezierPath(roundedRect: CGRect(x: -50, y: -50, width: 100, height: 100), cornerRadius: 25).CGPath
-        let size = CGSizeMake(100,100)
+        
+        let size = CGSizeMake(50,50)
+        let trianglePath = CGPathCreateMutable()
+        CGPathMoveToPoint(trianglePath, nil, -size.width, -size.height)
+        CGPathAddLineToPoint(trianglePath, nil, size.width, -size.height)
+        CGPathAddLineToPoint(trianglePath, nil, 0, size.height)
+        CGPathAddLineToPoint(trianglePath, nil, -size.width, -size.height)
+        
+        node.path = trianglePath
+        
         node.fillColor = self.color
         node.alpha = 1
         node.userInteractionEnabled = false
-        node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        
+        node.physicsBody = SKPhysicsBody(polygonFromPath: trianglePath)
+        
+        node.runAction(SKAction.rotateToAngle(Rotation.getRad(rotation), duration: 0))
+        //node.physicsBody = SKPhysicsBody(rectangleOfSize: size)
         node.physicsBody!.dynamic = false
         node.physicsBody!.categoryBitMask = CategoryMask.portalCategory
         node.physicsBody!.contactTestBitMask = CategoryMask.playerCategory

@@ -428,7 +428,7 @@ class GameScene: SKScene, Scene, SKPhysicsContactDelegate, ConnectionListener, I
         // get position from portal
         let portalPos = portal.position
         // create character
-        let newCharacter = Character(x: portalPos.x, y: portalPos.y, color: characterColor)
+        let newCharacter = Character(x: portalPos.x , y: portalPos.y, color: characterColor)
         // create node
         newCharacter.node.alpha = 0
         newCharacter.node.position = self.convertPointToView(newCharacter.position)
