@@ -78,12 +78,14 @@ class TutorialScene : GameScene {
             if portal != nil {
                 spawnCharacterOnPortal(characterColor, portal: portal!)
             }
-        case .openDoor(_):
-            if level == 2 {
+        case let .openDoor(color):
+            let colorStr = ColorManager.colors[color]!
+            if level == 2 &&  colorStr == ColorManager.colors[ColorString.teal]{
                 self.instructionLabel!.text = "Dra rätt spelare till rätt plats!"
             }
-        case .closeDoor(_):
-            if level == 2 {
+        case let .closeDoor(color):
+            let colorStr = ColorManager.colors[color]!
+            if level == 2 &&  colorStr == ColorManager.colors[ColorString.teal]{
                 self.instructionLabel!.text = "Försök öppna väggen!"
             }
             //spawnCharacter(ColorManager.colors[characterColor]!)
