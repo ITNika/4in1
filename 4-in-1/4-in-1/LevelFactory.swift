@@ -40,7 +40,6 @@ class LevelFactory {
         let salmonColor = ColorManager.colors[ColorString.salmon]!
         let purpleColor = ColorManager.colors[ColorString.purple]!
         let tealColor = ColorManager.colors[ColorString.teal]!
-        let yellowColor = ColorManager.colors[ColorString.yellow]!
         
         let offset: CGFloat = 150
         
@@ -123,7 +122,7 @@ class LevelFactory {
              BUTTONS
              ********************************/
             // create teal button
-            let tealButton = Button(x: screenWidth - offset, y: screenHeight / 2, color: tealColor)
+            let tealButton = Button(x: screenWidth - offset, y: offset, color: tealColor)
             buttons.append(tealButton)
             
             /********************************
@@ -131,7 +130,7 @@ class LevelFactory {
              ********************************/
             
             // create players
-            let tealPlayer = Character(x: offset, y: screenHeight / 2, color: tealColor)
+            let tealPlayer = Character(x: offset, y: offset, color: tealColor)
             // add to players....
             characters.append(tealPlayer)
             
@@ -146,8 +145,8 @@ class LevelFactory {
             /********************************
              PORTALS
              ********************************/
-            let portal1 = Portal(x: offset, y: offset, color: purpleColor, name: "A", destination: "B", rotation: Rotation.NORTH)
-            let portal2 = Portal(x: screenWidth - offset, y: offset, color: purpleColor, name: "B", destination: "A", rotation: Rotation.NORTH)
+            let portal1 = Portal(x: screenWidth/2 - offset, y: screenHeight/2, color: purpleColor, name: "A", destination: "B", rotation: Rotation.EAST)
+            let portal2 = Portal(x: screenWidth/2 + offset, y: screenHeight/2, color: purpleColor, name: "B", destination: "A", rotation: Rotation.WEST)
             
             portals.append(portal1)
             portals.append(portal2)
