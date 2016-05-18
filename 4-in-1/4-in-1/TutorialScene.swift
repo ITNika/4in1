@@ -36,7 +36,7 @@ class TutorialScene : GameScene {
         rightHand!.zPosition = 6
         switch level {
         case 0:
-            rightHand!.position = CGPoint(x: 150, y:325)
+            rightHand!.position = CGPoint(x: 150, y: CGRectGetMidY(self.scene!.frame))
             self.instructionLabel!.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y:CGRectGetMidY(self.scene!.frame)*1.5)
             self.instructionLabel!.text = "Dra spelaren till knappen!"
             scene?.addChild(rightHand!)

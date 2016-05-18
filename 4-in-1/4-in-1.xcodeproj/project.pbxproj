@@ -39,6 +39,7 @@
 		11CAE1D81CD92552001F34AB /* NavigationEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */; };
 		11CAE1DA1CD92B51001F34AB /* NetworkGameEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */; };
 		11CAE1DE1CD9F2B3001F34AB /* LevelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CAE1DD1CD9F2B3001F34AB /* LevelFactory.swift */; };
+		6DA7EB091CEC548E00C0D0E0 /* Rotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA7EB081CEC548E00C0D0E0 /* Rotation.swift */; };
 		E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */; };
 		E1935A701C9AE951001D9EFC /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1935A6F1C9AE951001D9EFC /* Wall.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +80,7 @@
 		11CAE1D71CD92552001F34AB /* NavigationEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationEventListener.swift; sourceTree = "<group>"; };
 		11CAE1D91CD92B51001F34AB /* NetworkGameEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkGameEventListener.swift; sourceTree = "<group>"; };
 		11CAE1DD1CD9F2B3001F34AB /* LevelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelFactory.swift; sourceTree = "<group>"; };
+		6DA7EB081CEC548E00C0D0E0 /* Rotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rotation.swift; sourceTree = "<group>"; };
 		E10BCABF1C9B553F00ACEF35 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		E1935A6F1C9AE951001D9EFC /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,6 +190,7 @@
 				11CAE1CB1CD89F56001F34AB /* GameEvent.swift */,
 				11CAE1CD1CD8A073001F34AB /* ColorString.swift */,
 				11CAE1D51CD8EA55001F34AB /* CategoryMask.swift */,
+				6DA7EB081CEC548E00C0D0E0 /* Rotation.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -224,7 +227,7 @@
 				TargetAttributes = {
 					1106740C1C9ABF52007CE749 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 84A5A4GS95;
+						DevelopmentTeam = 7KL28NLWJ4;
 					};
 				};
 			};
@@ -289,6 +292,7 @@
 				1106742E1C9AC286007CE749 /* ColoredEntity.swift in Sources */,
 				E10BCAC01C9B553F00ACEF35 /* MenuScene.swift in Sources */,
 				11CAE1CE1CD8A073001F34AB /* ColorString.swift in Sources */,
+				6DA7EB091CEC548E00C0D0E0 /* Rotation.swift in Sources */,
 				110674111C9ABF52007CE749 /* AppDelegate.swift in Sources */,
 				11CAE1BF1CD24241001F34AB /* ConnectionListener.swift in Sources */,
 				11CAE1C61CD7A60A001F34AB /* ColorManager.swift in Sources */,
@@ -413,7 +417,7 @@
 				INFOPLIST_FILE = "4-in-1/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = se.chalmers.datx02.2016.12.cirkva;
+				PRODUCT_BUNDLE_IDENTIFIER = "se.chalmers.datx02.2016.12.cirkva-demo";
 				PRODUCT_NAME = CIRKVA;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
@@ -429,7 +433,7 @@
 				INFOPLIST_FILE = "4-in-1/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = se.chalmers.datx02.2016.12.cirkva;
+				PRODUCT_BUNDLE_IDENTIFIER = "se.chalmers.datx02.2016.12.cirkva-demo";
 				PRODUCT_NAME = CIRKVA;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
